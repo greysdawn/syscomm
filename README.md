@@ -1,7 +1,7 @@
 # Syscomm
 A notes app for systems made with LOVE2D
 
-## Who's this for? What are systems?
+### Who's this for? What are systems?
 A system is a person that shares their body with many others. Often this is the result of having a dissociative disorder like DID, but people that aren't diagnosed and have headmates are also systems.
 
 ### Wow that's weird
