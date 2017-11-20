@@ -3,7 +3,7 @@ local testroom={}
 function testroom:enter()
   love.graphics.setBackgroundColor({0,0,0,255})
   Display.setActiveButton("none")
-  Display.create_menu("Logout",{lo="LOG OUT",ex="EXIT"},{255,255,255,255},{255,200,200,255},{255,0,0,255},0,30,100,20,14,"line",true)
+  Display.create("menu","Logout",{255,255,255,255},{255,200,200,255},{255,0,0,255},0,30,100,20,14,"line",{lo="LOG OUT",ex="EXIT"},true)
 end
 
 function testroom:update()

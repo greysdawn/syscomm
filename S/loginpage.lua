@@ -6,16 +6,13 @@ logtab={}
 function LP:enter()
   love.graphics.setBackgroundColor(150,150,150,255)
   posx,posy=love.mouse.getPosition()
-  Display.create_ibox("usn",{255,255,255,255},{255,200,200,255},{0,0,0,255},ww/2-100,200,200,20,16)
-  Display.create_ibox("pas",{255,255,255,255},{255,200,200,255},{0,0,0,255},ww/2-100,240,200,20,16)
-  Display.create_button("log",{255,255,255,255},{255,200,200,255},{0,0,0,255},ww/2-100,280,80,20,"  LOG IN",16,"fill")
-  Display.create_button("reg",{255,255,255,255},{255,200,200,255},{0,0,0,255},ww/2+20,280,80,20,"REGISTER",16,"fill")
-  Display.create_simpbox("er1",{0,0,0,0},{0,0,0,0},{255,0,0,255},ww/2-135,150,270,30,16,"fill","Login failed; not registered")
-  Display.create_simpbox("er2",{0,0,0,0},{0,0,0,0},{255,0,0,255},ww/2-135,150,270,30,16,"fill","Login failed; incorrect password")
-  Display.create_simpbox("er3",{0,0,0,0},{0,0,0,0},{255,0,0,255},ww/2-135,150,270,30,16,"fill","Register failed; already registered")
-  Display.hidebox("er1")
-  Display.hidebox("er2")
-  Display.hidebox("er3")
+  Display.create("ibox","usn",{255,255,255,255},{255,200,200,255},{0,0,0,255},ww/2-100,200,200,20,16)
+  Display.create("ibox","pas",{255,255,255,255},{255,200,200,255},{0,0,0,255},ww/2-100,240,200,20,16)
+  Display.create("button","log",{255,255,255,255},{255,200,200,255},{0,0,0,255},ww/2-100,280,80,20,16,"fill","  LOG IN")
+  Display.create("button","reg",{255,255,255,255},{255,200,200,255},{0,0,0,255},ww/2+20,280,80,20,16,"fill","REGISTER")
+  Display.create("simpbox","er1",{0,0,0,0},{0,0,0,0},{255,0,0,255},ww/2-135,150,270,30,16,"fill","Login failed; not registered",true)
+  Display.create("simpbox","er2",{0,0,0,0},{0,0,0,0},{255,0,0,255},ww/2-135,150,270,30,16,"fill","Login failed; incorrect password",true)
+  Display.create("simpbox","er3",{0,0,0,0},{0,0,0,0},{255,0,0,255},ww/2-135,150,270,30,16,"fill","Register failed; already registered",true)
   ert=""
 
 end

@@ -6,107 +6,99 @@ lb={}
 rb={}
 time=0
 
---create box that shows text
-function Display.create_simpbox(name,bcolor,acolor,tcolor,x,y,width,height,tsize,type,text,hid)
-  boxes[name]={}
-  --active color
-  boxes[name].acolor=acolor
-  --box background/line color
-  boxes[name].boxcolor=bcolor
-  --text color
-  boxes[name].textcolor=tcolor
-  boxes[name].h=height
-  boxes[name].w=width
-  boxes[name].x=x
-  boxes[name].y=y
-  --text size
-  boxes[name].tsize=tsize or 16
-  --fill or line mode
-  boxes[name].type=type or "fill"
-  --the text for it
-  boxes[name].text=text or ""
+function Display.create(type,name,bcol,acol,tcol,x,y,width,height,tsize,mode,b_t,hid)
+  if type=="menu" then
+    menus[name]={}
+    menus[name].buttons={}
+    menus[name].h=30
+    menus[name].w=width
+    menus[name].color=bcol
+    menus[name].tcolor=tcol
+    menus[name].x=x
+    menus[name].y=y
+    menus[name].tsize=tsize or 16
+    menus[name].mode=mode or "fill"
+    menus[name].hidden=hid or false
+    for i,v in pairs(b_t) do --i is the button name, v is the button text, so, btns should look like {"mbtn1"="text"}
+      Display.create("button",i,bcol,acol,tcol,x+10,y+menus[name].h,width-20,height,menus[name].tsize,menus[name].mode,v)
+      table.insert(menus[name].buttons,i)
+      menus[name].h=menus[name].h+height+10
+    end
+  elseif type=="button" then
+    buttons[name]={}
+    --active color
+    buttons[name].acolor=acol
+    --button color
+    buttons[name].bcolor=bcol
+    --text color
+    buttons[name].tcolor=tcol
+    buttons[name].x=x
+    buttons[name].y=y
+    buttons[name].w=width
+    buttons[name].h=height
+    --text
+    buttons[name].text=b_t
+    --text size
+    buttons[name].tsize=tsize or 16
+    --draw mode
+    buttons[name].mode=mode or "fill"
+    --not active
+    buttons[name].active=false
 
-  --active? not active? default: not active
-  boxes[name].active=false
+    buttons[name].hidden=hid or false
+  elseif type=="ibox" then
+    boxes[name]={}
+    --active color
+    boxes[name].acolor=acol
+    --box color
+    boxes[name].bcolor=bcol
+    --text color
+    boxes[name].tcolor=tcol
+    boxes[name].h=height
+    boxes[name].w=width
+    boxes[name].x=x
+    boxes[name].y=y
+    --text
+    boxes[name].text=b_t or ""
+    --individual character
+    boxes[name].chars={}
+    --used later
+    boxes[name].tempchars={}
+    --text size
+    boxes[name].tsize=tsize or 16
+    --mode of drawing
+    boxes[name].mode=mode or "fill"
+    --used later
+    boxes[name].temptext=b_t or ""
+    --used later
+    boxes[name].t=0
+    --not active on creation
+    boxes[name].active=false
 
-  boxes[name].hidden=hid or false
-end
+    boxes[name].hidden=hid or false
+  elseif type=="simpbox" then
+    boxes[name]={}
+    --active color
+    boxes[name].acolor=acol
+    --box background/line color
+    boxes[name].bcolor=bcol
+    --text color
+    boxes[name].tcolor=tcol
+    boxes[name].h=height
+    boxes[name].w=width
+    boxes[name].x=x
+    boxes[name].y=y
+    --text size
+    boxes[name].tsize=tsize or 16
+    --fill or line mode
+    boxes[name].mode=mode or "fill"
+    --the text for it
+    boxes[name].text=b_t or ""
 
---create input box
-function Display.create_ibox(name,bcolor,acolor,tcolor,x,y,width,height,tsize,type,text,hid)
-  boxes[name]={}
-  --active color
-  boxes[name].acolor=acolor
-  --box color
-  boxes[name].boxcolor=bcolor
-  --text color
-  boxes[name].textcolor=tcolor
-  boxes[name].h=height
-  boxes[name].w=width
-  boxes[name].x=x
-  boxes[name].y=y
-  --text
-  boxes[name].text=text or ""
-  --individual character
-  boxes[name].chars={}
-  --used later
-  boxes[name].tempchars={}
-  --text size
-  boxes[name].tsize=tsize or 16
-  --mode of drawing
-  boxes[name].type=type or "fill"
-  --used later
-  boxes[name].temptext=text or ""
-  --used later
-  boxes[name].t=0
-  --not active on creation
-  boxes[name].active=false
+    --active? not active? default: not active
+    boxes[name].active=false
 
-  boxes[name].hidden=hid or false
-end
-
-function Display.create_button(name,bcol,acol,tcol,x,y,width,height,text,tsize,mode,hid)
-  buttons[name]={}
-  --active color
-  buttons[name].acolor=acol
-  --button color
-  buttons[name].bcolor=bcol
-  --text color
-  buttons[name].tcolor=tcol
-  buttons[name].x=x
-  buttons[name].y=y
-  buttons[name].w=width
-  buttons[name].h=height
-  --text
-  buttons[name].text=text
-  --text size
-  buttons[name].tsize=tsize or 16
-  --draw mode
-  buttons[name].mode=mode or "fill"
-  --not active
-  buttons[name].active=false
-
-  buttons[name].hidden=hid or false
-end
-
---this one's complicated
---okay so basically this one takes a table, btns, as an argument
-function Display.create_menu(name,btns,bcol,acol,tcol,x,y,width,height,tsize,mode,hid)
-  menus[name]={}
-  menus[name].buttons={}
-  menus[name].height=30
-  menus[name].width=width
-  menus[name].color=bcol
-  menus[name].tcolor=tcol
-  menus[name].x=x
-  menus[name].y=y
-  menus[name].tsize=tsize or 16
-  menus[name].mode=mode or "fill"
-  menus[name].hidden=hid or false
-  for i,v in pairs(btns) do --i is the button name, v is the button text, so, btns should look like {"mbtn1"="text"}
-    Display.create_button(i,bcol,acol,tcol,x+10,y+menus[name].height,width-20,height,v,menus[name].tsize,menus[name].mode)
-    table.insert(menus[name].buttons,i)
-    menus[name].height=menus[name].height+height+10
+    boxes[name].hidden=hid or false
   end
 end
 
@@ -209,11 +201,11 @@ function Display.box(name)
       if boxes[name].active then --if it's active...
         love.graphics.setColor(boxes[name].acolor) --draw it as the active color
       else
-        love.graphics.setColor(boxes[name].boxcolor) --otherwise draw it as the default color
+        love.graphics.setColor(boxes[name].bcolor) --otherwise draw it as the default color
       end
 
-      love.graphics.rectangle(boxes[name].type,boxes[name].x,boxes[name].y,boxes[name].w,boxes[name].h) --draw it
-      love.graphics.setColor(boxes[name].textcolor) --set it to the text color
+      love.graphics.rectangle(boxes[name].mode,boxes[name].x,boxes[name].y,boxes[name].w,boxes[name].h) --draw it
+      love.graphics.setColor(boxes[name].tcolor) --set it to the text color
       love.graphics.print(boxes[name].text,boxes[name].x,boxes[name].y) --write the text
     end
   else
@@ -240,14 +232,13 @@ function Display.button(name)
     else
       error("Button "..name.." is not registered.")
     end
-
 end
 
 function Display.menu(name)
   if menus[name] ~= nil then
     if not menus[name].hidden then
       love.graphics.setColor(menus[name].color)
-      love.graphics.rectangle(menus[name].mode,menus[name].x,menus[name].y,menus[name].width,menus[name].height)
+      love.graphics.rectangle(menus[name].mode,menus[name].x,menus[name].y,menus[name].w,menus[name].h)
       love.graphics.setColor(menus[name].tcolor)
       love.graphics.print(name,menus[name].x,menus[name].y)
       for i in pairs(menus[name].buttons) do
@@ -344,7 +335,7 @@ end
 
 --change the box color
 function Display.changeboxcolor(box,color)
-  boxes[box].boxcolor=color
+  boxes[box].bcolor=color
 end
 
 --change button color
