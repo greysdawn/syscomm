@@ -1,6 +1,11 @@
 # Syscomm
 A notes app for systems made with LOVE2D
 
+## A Note:
+# This is still in development. Currently there's not much you can do. Logging in and logging out is about it. Sorry!
+
+## FAQ
+
 ### Who's this for? What are systems?
 A system is a person that shares their body with many others. Often this is the result of having a dissociative disorder like DID, but people that aren't diagnosed and have headmates are also systems.
 
@@ -23,6 +28,7 @@ I mean, we can't exactly stop you, so... Whatever I guess?
 
 ### Who spends time on this?
 Mostly me (Kam)! However, Jeff and 4N4 put work in sometimes, too.
+
 
 
 *Last edit made by Kam at 2127 on 11.17.2017*
