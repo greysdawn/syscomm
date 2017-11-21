@@ -103,6 +103,10 @@ function Display.create(type,name,bcol,acol,tcol,x,y,width,height,tsize,mode,b_t
   end
 end
 
+function Display.test
+  love.graphics.print("You're testing something! \OAO/")
+end
+
 function Display.setActiveButton(name)
   --set everything as false
   for k,v in pairs(buttons) do
