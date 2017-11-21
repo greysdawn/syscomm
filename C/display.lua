@@ -2,6 +2,7 @@ Display={}
 boxes={}
 buttons={}
 menus={}
+windows={}
 lb={}
 rb={}
 time=0
