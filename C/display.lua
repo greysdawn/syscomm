@@ -273,7 +273,9 @@ end
 function Display.ibox_upd(dt,box)
   --if the button is clicked on
   if love.mouse.isDown(1) and posx>=boxes[box].x and posx<=boxes[box].x+boxes[box].w and posy>=boxes[box].y and posy<=boxes[box].y+boxes[box].h and not boxes[box].hidden then
-    Display.setActiveBox(box) --make that thing active
+    boxes[box].active=true --make that thing active
+  elseif love.mouse.isDown(1) and not (posx>=boxes[box].x and posx<=boxes[box].x+boxes[box].w and posy>=boxes[box].y and posy<=boxes[box].y+boxes[box].h and not boxes[box].hidden) then
+    boxes[box].active=false
   end
 
   if boxes[box].hidden then
@@ -309,7 +311,9 @@ end
 function Display.button_upd(b)
   --if clicked
   if love.mouse.isDown(1) and posx>=buttons[b].x and posx<=buttons[b].x+buttons[b].w and posy>=buttons[b].y and posy<=buttons[b].y+buttons[b].h then
-    Display.setActiveButton(b)--set active
+    buttons[b].active=true
+  elseif love.mouse.isDown(1) and not (posx>=buttons[b].x and posx<=buttons[b].x+buttons[b].w and posy>=buttons[b].y and posy<=buttons[b].y+buttons[b].h) then
+    buttons[b].active=false
   end
   --that's all you need
 end
