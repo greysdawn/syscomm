@@ -20,7 +20,7 @@ function Display.create(type,name,bcol,acol,tcol,x,y,width,height,tsize,mode,b_t
     menus[name].tsize=tsize or 16
     menus[name].mode=mode or "fill"
     menus[name].hidden=hid or false
-    for i,v in pairs(b_t) do --i is the button name, v is the button text, so, btns should look like {"mbtn1"="text"}
+    for i,v in pairs(b_t) do --i is the button name, v is the button text, so, btns should look like {mbtn1="text"}
       Display.create("button",i,bcol,acol,tcol,x+10,y+menus[name].h,width-20,height,menus[name].tsize,menus[name].mode,v)
       table.insert(menus[name].buttons,i)
       menus[name].h=menus[name].h+height+10
@@ -103,8 +103,38 @@ function Display.create(type,name,bcol,acol,tcol,x,y,width,height,tsize,mode,b_t
   end
 end
 
-function Display.test
-  love.graphics.print("You're testing something! \\OAO/")
+function Display.create_window(name,bcol,ocol,tcol,x,y,w,h,hid)
+  windows[name]={}
+  windows[name].bcolor=bcol or {255,255,255,255}
+  windows[name].ocolor=ocol or {200,200,200,255}
+  windows[name].tcolor=tcol or {255,255,255,255}
+  windows[name].tsize=16
+  windows[name].x=x or 0
+  windows[name].y=y or 0
+  windows[name].w=w or 100
+  windows[name].h=h+10 or 110
+  windows[name].ih=y+20
+  windows[name].buttons={}
+  windows[name].menus={}
+  windows[name].sboxes={}
+  windows[name].iboxes={}
+  windows[name].hidden=hid or false
+end
+
+function Display.add(type,wind,given)
+  if type=="button" then
+    for i,v in pairs(given) do
+      if windows[wind].ih+v[5]>=windows[wind].h then
+        error("Button "..i.." set past end of window. Please move it.")
+      end
+      Display.create("button",i,v[1],v[2],v[3],v[4],v[5]+windows[wind].ih,v[6],v[7],v[8],v[9],v[10],v[11])
+      table.insert(windows[wind].buttons,tostring(i))
+    end
+  end
+
+  --if type=="menu" then
+    --
+  --end
 end
 
 function Display.setActiveButton(name)
@@ -254,6 +284,31 @@ function Display.menu(name)
     error("Menu "..name.." not a valid menu.")
   end
 end
+
+function Display.window(name)
+  if windows[name] ~= nil then
+    if not windows[name].hidden then
+      love.graphics.setColor(windows[name].bcolor)
+      love.graphics.rectangle("fill",windows[name].x,windows[name].y,windows[name].w,windows[name].h)
+      love.graphics.setColor({200,0,0,255})
+      love.graphics.rectangle("fill",windows[name].x+windows[name].w-10,windows[name].y,10,10)
+      love.graphics.setColor(windows[name].ocolor)
+      love.graphics.setLineWidth(2)
+      love.graphics.rectangle("line",windows[name].x,windows[name].y,windows[name].w,windows[name].h)
+      love.graphics.setNewFont(windows[name].tsize)
+      love.graphics.setColor(windows[name].tcolor)
+      love.graphics.print(name,windows[name].x,windows[name].y)
+      if #windows[name].buttons >0 then
+        for i in pairs(windows[name].buttons) do
+          Display.button(windows[name].buttons[i])
+        end
+      end
+    end
+  else
+    error("Window "..name.." is not a valid window.")
+  end
+end
+
 --backspaaaaaace (only for input boxes tho)
 function Display.bsp(k,box)
   if k == "backspace" then --if the backspace button is pressed
@@ -330,6 +385,19 @@ function Display.menu_upd(name)
   if not menus[name].hidden then
     for i in pairs(menus[name].buttons) do
       Display.button_upd(menus[name].buttons[i])
+    end
+  end
+end
+
+function Display.window_upd(name)
+  if love.mouse.isDown(1) and posx>=windows[name].x+windows[name].w-10 and posx<=windows[name].x+windows[name].w and posy>=windows[name].y and posy<=windows[name].y+10 then
+    windows[name].hidden=true
+  end
+  if not windows[name].hidden then
+    if #windows[name].buttons > 0 then
+      for i in pairs(windows[name].buttons) do
+        Display.button_upd(windows[name].buttons[i])
+      end
     end
   end
 end
