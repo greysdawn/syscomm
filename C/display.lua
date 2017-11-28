@@ -464,12 +464,6 @@ function Display.delete_button(button)
   buttons[button]={}
 end
 
-function Display.notes_menu()
-end
-
-function Display.edit_menu()
-end
-
 function Display.notelist()
 end
 
