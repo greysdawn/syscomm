@@ -391,7 +391,7 @@ end
 
 function Display.window_upd(name)
   if love.mouse.isDown(1) and posx>=windows[name].x+windows[name].w-10 and posx<=windows[name].x+windows[name].w and posy>=windows[name].y and posy<=windows[name].y+10 then
-    windows[name].hidden=true
+    Display.hidewindow(name)
   end
   if not windows[name].hidden then
     if #windows[name].buttons > 0 then
@@ -447,6 +447,13 @@ end
 
 function Display.hidemenu(b)
   menus[b].hidden=true
+end
+
+function Display.hidewindow(w)
+  windows[w].hidden=true
+  for b in pairs(windows[w].buttons) do
+    buttons[windows[w].buttons[b]].active=false
+  end
 end
 
 function Display.delete_box(box)
