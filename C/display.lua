@@ -5,6 +5,7 @@ menus={}
 windows={}
 lb={}
 rb={}
+z={}
 time=0
 
 function Display.create(type,name,bcol,acol,tcol,x,y,width,height,tsize,mode,b_t,hid)
@@ -20,11 +21,13 @@ function Display.create(type,name,bcol,acol,tcol,x,y,width,height,tsize,mode,b_t
     menus[name].tsize=tsize or 16
     menus[name].mode=mode or "fill"
     menus[name].hidden=hid or false
+    table.insert(z,name)
     for i,v in pairs(b_t) do --i is the button name, v is the button text, so, btns should look like {mbtn1="text"}
-      Display.create("button",i,bcol,acol,tcol,x+10,y+menus[name].h,width-20,height,menus[name].tsize,menus[name].mode,v)
+      Display.create("button",i,bcol,acol,tcol,x+10,y+menus[name].h,width-20,height,menus[name].tsize,menus[name].mode,v,hid)
       table.insert(menus[name].buttons,i)
       menus[name].h=menus[name].h+height+10
     end
+
   elseif type=="button" then
     buttons[name]={}
     --active color
@@ -47,6 +50,7 @@ function Display.create(type,name,bcol,acol,tcol,x,y,width,height,tsize,mode,b_t
     buttons[name].active=false
 
     buttons[name].hidden=hid or false
+    table.insert(z,name)
   elseif type=="ibox" then
     boxes[name]={}
     --active color
@@ -77,6 +81,7 @@ function Display.create(type,name,bcol,acol,tcol,x,y,width,height,tsize,mode,b_t
     boxes[name].active=false
 
     boxes[name].hidden=hid or false
+    table.insert(z,name)
   elseif type=="simpbox" then
     boxes[name]={}
     --active color
@@ -100,6 +105,7 @@ function Display.create(type,name,bcol,acol,tcol,x,y,width,height,tsize,mode,b_t
     boxes[name].active=false
 
     boxes[name].hidden=hid or false
+    table.insert(z,name)
   end
 end
 
@@ -119,6 +125,7 @@ function Display.create_window(name,bcol,ocol,tcol,x,y,w,h,hid)
   windows[name].sboxes={}
   windows[name].iboxes={}
   windows[name].hidden=hid or false
+  table.insert(z,name)
 end
 
 function Display.add(type,wind,given)
@@ -127,14 +134,15 @@ function Display.add(type,wind,given)
       if windows[wind].ih+v[5]>=windows[wind].h then
         error("Button "..i.." set past end of window. Please move it.")
       end
-      Display.create("button",i,v[1],v[2],v[3],v[4],v[5]+windows[wind].ih,v[6],v[7],v[8],v[9],v[10],v[11])
+      Display.create("button",i,v[1],v[2],v[3],v[4],v[5]+windows[wind].ih,v[6],v[7],v[8],v[9],v[10],windows[wind].hidden)
       table.insert(windows[wind].buttons,tostring(i))
     end
   end
 
-  --if type=="menu" then
-    --
-  --end
+  --[[ **** TO ADD ***
+  -Menus
+  -Boxes
+  ]]
 end
 
 function Display.setActiveButton(name)
@@ -164,13 +172,13 @@ function Display.getActiveButton()
   --local active. Local means you can't access act outside of the function
   local act=""
   --loop through buttons
-  for e,k in pairs(buttons) do
-    --if the button is active...
-    if k.active then
-      --put the name of the active button in a variable
-      act=e
+    for e,k in pairs(buttons) do
+      --if the button is active...
+      if k.active then
+        --put the name of the active button in a variable
+        act=e
+      end
     end
-  end
   --if none are active...
   if act == "" then
     return "none" --does what it says
@@ -248,6 +256,24 @@ function Display.box(name)
   end
 end
 
+function Display.boxes()
+  for i,v in pairs(boxes) do
+    if not v.hidden then
+      love.graphics.setNewFont(v.tsize) --set the font to the text size
+
+      if v.active then --if it's active...
+        love.graphics.setColor(v.acolor) --draw it as the active color
+      else
+        love.graphics.setColor(v.bcolor) --otherwise draw it as the default color
+      end
+
+      love.graphics.rectangle(v.mode,v.x,v.y,v.w,v.h) --draw it
+      love.graphics.setColor(v.tcolor) --set it to the text color
+      love.graphics.print(v.text,v.x,v.y) --write the text
+    end
+  end
+end
+
 --same with a button
 function Display.button(name)
   if buttons[name] ~= nil then
@@ -269,15 +295,34 @@ function Display.button(name)
     end
 end
 
+function Display.buttons()
+  for i,v in pairs(buttons) do
+    if not v.hidden then
+      love.graphics.setNewFont(v.tsize)
+
+      if v.active then
+        love.graphics.setColor(v.acolor)
+      else
+        love.graphics.setColor(v.bcolor)
+      end
+
+      love.graphics.rectangle(v.mode,v.x,v.y,v.w,v.h)
+      love.graphics.setColor(v.tcolor)
+      love.graphics.print(v.text,v.x,v.y)
+      end
+  end
+end
+
 function Display.menu(name)
   if menus[name] ~= nil then
     if not menus[name].hidden then
       love.graphics.setColor(menus[name].color)
       love.graphics.rectangle(menus[name].mode,menus[name].x,menus[name].y,menus[name].w,menus[name].h)
+      love.graphics.setNewFont(menus[name].tsize)
       love.graphics.setColor(menus[name].tcolor)
       love.graphics.print(name,menus[name].x,menus[name].y)
-      for i in pairs(menus[name].buttons) do
-        Display.button(menus[name].buttons[i])
+      for i,v in ipairs(menus[name].buttons) do
+        Display.showbutton(v)
       end
     end
   else
@@ -299,13 +344,30 @@ function Display.window(name)
       love.graphics.setColor(windows[name].tcolor)
       love.graphics.print(name,windows[name].x,windows[name].y)
       if #windows[name].buttons >0 then
-        for i in pairs(windows[name].buttons) do
-          Display.button(windows[name].buttons[i])
+        for i,v in ipairs(windows[name].buttons) do
+          Display.showbutton(v)
         end
       end
     end
   else
     error("Window "..name.." is not a valid window.")
+  end
+end
+
+function Display.all()
+  for i,v in ipairs(z) do
+    if boxes[v] then
+      Display.box(v)
+    end
+    if windows[v] then
+      Display.window(v)
+    end
+    if menus[v] then
+      Display.menu(v)
+    end
+    if buttons[v] then
+      Display.button(v)
+    end
   end
 end
 
@@ -423,6 +485,9 @@ end
 function Display.clear()
   boxes={}
   buttons={}
+  windows={}
+  menus={}
+  z={}
 end
 
 function Display.showbox(b)
@@ -447,12 +512,17 @@ end
 
 function Display.hidemenu(b)
   menus[b].hidden=true
+  for bb in pairs(menus[b].buttons) do
+    buttons[menus[b].buttons[bb]].active=false
+    buttons[menus[b].buttons[bb]].hidden=true
+  end
 end
 
 function Display.hidewindow(w)
   windows[w].hidden=true
   for b in pairs(windows[w].buttons) do
     buttons[windows[w].buttons[b]].active=false
+    buttons[windows[w].buttons[b]].hidden=true
   end
 end
 
@@ -462,6 +532,39 @@ end
 
 function Display.delete_button(button)
   buttons[button]={}
+end
+
+function Display.reorder(name,n)
+  for i,v in ipairs(z) do
+    if v==name then
+      table.remove(z,i)
+      table.insert(z,n,name)
+    end
+  end
+end
+
+function Display.tofront(name)
+  local fnd=false
+  local lp=1
+  while lp<=2 do
+    for i,v in ipairs(z) do
+      if v==name and not fnd then
+        table.remove(z,i)
+        table.insert(z,name)
+        fnd=true
+      end
+
+      if menus[name] and fnd then
+        for e,f in ipairs(menus[name].buttons) do
+          if v==f then
+            table.remove(z,i)
+            table.insert(z,f)
+          end
+        end
+      end
+    end
+    lp=lp+1
+  end
 end
 
 function Display.notelist()
