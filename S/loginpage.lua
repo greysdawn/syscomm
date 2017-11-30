@@ -21,10 +21,11 @@ end
 function LP:update(dt)
   ab=Display.getActiveButton()
   posx,posy=love.mouse.getPosition()
-  Display.ibox_upd(dt,"usn")
-  Display.ibox_upd(dt,"pas")
-  Display.button_upd("log")
-  Display.button_upd("reg")
+  --Display.ibox_upd(dt,"usn")
+  --Display.ibox_upd(dt,"pas")
+  --Display.button_upd("log")
+  --Display.button_upd("reg")
+  Display.update(dt)
 
   if ab=="log" then
     Display.setActiveButton("none")
@@ -44,8 +45,7 @@ function LP:update(dt)
 end
 
 function LP:textinput(t)
-    Display.ib_text(t,"usn",10)
-    Display.ib_text(t,"pas",10)
+    Display.text(t)
 end
 
 function LP:keypressed(key)
@@ -53,9 +53,6 @@ function LP:keypressed(key)
     love.event.quit()
   end
 
-
-  Display.bsp(key,"usn")
-  Display.bsp(key,"pas")
   Login.lkeys(key)
 
 end

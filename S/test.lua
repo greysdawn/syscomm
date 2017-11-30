@@ -12,15 +12,14 @@ end
 
 function testroom:update(dt)
   posx,posy=love.mouse.getPosition()
-  Display.menu_upd("Logout")
+  Display.update(dt)
   local ac=Display.getActiveOption("Logout")
-  Display.window_upd("test")
-  Display.button_upd("testwin")
+  local acb=Display.getActiveButton()
 
   if ac=="ex" then
     love.event.quit()
   end
-  if Display.getActiveButton()=="testwin" then
+  if acb=="testwin" then
     windows["test"].hidden=false
   end
   if ac == "lo" then
@@ -28,7 +27,7 @@ function testroom:update(dt)
     ac=nil
     Gamestate.switch(LP)
   end
-  
+
 end
 
 function testroom:draw()

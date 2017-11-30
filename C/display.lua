@@ -3,12 +3,10 @@ boxes={}
 buttons={}
 menus={}
 windows={}
-lb={}
-rb={}
 z={}
 time=0
 
-function Display.create(type,name,bcol,acol,tcol,x,y,width,height,tsize,mode,b_t,hid)
+function Display.create(type,name,bcol,acol,tcol,x,y,width,height,tsize,mode,b_t,hid,max)
   if type=="menu" then
     menus[name]={}
     menus[name].buttons={}
@@ -54,6 +52,8 @@ function Display.create(type,name,bcol,acol,tcol,x,y,width,height,tsize,mode,b_t
   elseif type=="ibox" then
     boxes[name]={}
     --active color
+    boxes[name].max=max or 10
+    boxes[name].type=type
     boxes[name].acolor=acol
     --box color
     boxes[name].bcolor=bcol
@@ -76,7 +76,7 @@ function Display.create(type,name,bcol,acol,tcol,x,y,width,height,tsize,mode,b_t
     --used later
     boxes[name].temptext=b_t or ""
     --used later
-    boxes[name].t=0
+    boxes[name].t=.125
     --not active on creation
     boxes[name].active=false
 
@@ -85,6 +85,7 @@ function Display.create(type,name,bcol,acol,tcol,x,y,width,height,tsize,mode,b_t
   elseif type=="simpbox" then
     boxes[name]={}
     --active color
+    boxes[name].type=type
     boxes[name].acolor=acol
     --box background/line color
     boxes[name].bcolor=bcol
@@ -125,6 +126,7 @@ function Display.create_window(name,bcol,ocol,tcol,x,y,w,h,hid)
   windows[name].sboxes={}
   windows[name].iboxes={}
   windows[name].hidden=hid or false
+  windows[name].active=false
   table.insert(z,name)
 end
 
@@ -210,6 +212,25 @@ function Display.isButtonActive(button)
   end
 end
 
+function Display.setActiveWindow(wind)
+  windows[wind].active=true
+end
+
+function Display.getActiveWindow()
+  local act=""
+  for i,v in pairs(windows) do
+    if v.active then
+      act=i
+    end
+  end
+
+  if act=="" then
+    return "none"
+  else
+    return act
+  end
+end
+
 function Display.getActiveOption(menu)
   local act=""
   local ab=Display.getActiveButton()
@@ -256,24 +277,6 @@ function Display.box(name)
   end
 end
 
-function Display.boxes()
-  for i,v in pairs(boxes) do
-    if not v.hidden then
-      love.graphics.setNewFont(v.tsize) --set the font to the text size
-
-      if v.active then --if it's active...
-        love.graphics.setColor(v.acolor) --draw it as the active color
-      else
-        love.graphics.setColor(v.bcolor) --otherwise draw it as the default color
-      end
-
-      love.graphics.rectangle(v.mode,v.x,v.y,v.w,v.h) --draw it
-      love.graphics.setColor(v.tcolor) --set it to the text color
-      love.graphics.print(v.text,v.x,v.y) --write the text
-    end
-  end
-end
-
 --same with a button
 function Display.button(name)
   if buttons[name] ~= nil then
@@ -293,24 +296,6 @@ function Display.button(name)
     else
       error("Button "..name.." is not registered.")
     end
-end
-
-function Display.buttons()
-  for i,v in pairs(buttons) do
-    if not v.hidden then
-      love.graphics.setNewFont(v.tsize)
-
-      if v.active then
-        love.graphics.setColor(v.acolor)
-      else
-        love.graphics.setColor(v.bcolor)
-      end
-
-      love.graphics.rectangle(v.mode,v.x,v.y,v.w,v.h)
-      love.graphics.setColor(v.tcolor)
-      love.graphics.print(v.text,v.x,v.y)
-      end
-  end
 end
 
 function Display.menu(name)
@@ -371,20 +356,10 @@ function Display.all()
   end
 end
 
---backspaaaaaace (only for input boxes tho)
-function Display.bsp(k,box)
-  if k == "backspace" then --if the backspace button is pressed
-    if boxes[box].active and #boxes[box].chars>0 then --and the box is active and there are characters
-      boxes[box].chars[#boxes[box].chars]=nil --delete the last character
-    end
-  end
-end
-
 --do the text things for input boxes
-function Display.ib_text(k,b,max)
-  local max=max or 10 --set the max, default is 10
+function Display.ib_text(k,b)
   if boxes[b].active and k:match("%w") then --if the box is active and the key is a letter or number
-    if #boxes[b].chars<max then --and the number of characters in the box is less than the max
+    if #boxes[b].chars<boxes[b].max then --and the number of characters in the box is less than the max
       boxes[b].chars[#boxes[b].chars+1]=k --add to the characters
     end
   end
@@ -423,7 +398,7 @@ function Display.ibox_upd(dt,box)
       end
     end
   else
-    boxes[box].t=0 --or just set it at 0
+    boxes[box].t=.125 --or just set it at 0
   end
 
   boxes[box].text=boxes[box].temptext --set the text once you're done
@@ -453,12 +428,46 @@ end
 
 function Display.window_upd(name)
   if love.mouse.isDown(1) and posx>=windows[name].x+windows[name].w-10 and posx<=windows[name].x+windows[name].w and posy>=windows[name].y and posy<=windows[name].y+10 then
-    Display.hidewindow(name)
+  Display.hidewindow(name)
+  elseif love.mouse.isDown(1) and posx>=windows[name].x and posx<=windows[name].x+windows[name].w and posy>=windows[name].y and posy<=windows[name].y+windows[name].h then
+    windows[name].active=true
+    Display.tofront(name)
+  elseif love.mouse.isDown(1) and not (posx>=windows[name].x and posx<=windows[name].x+windows[name].w and posy>=windows[name].y and posy<=windows[name].y+windows[name].h) then
+    windows[name].active=false
   end
   if not windows[name].hidden then
     if #windows[name].buttons > 0 then
       for i in pairs(windows[name].buttons) do
         Display.button_upd(windows[name].buttons[i])
+      end
+    end
+  end
+end
+
+function Display.update(dt)
+  for i,v in ipairs(z) do
+    if boxes[v] then
+      if boxes[v].type=="ibox" then
+      Display.ibox_upd(dt,v)
+      end
+    end
+    if buttons[v] then
+      Display.button_upd(v)
+    end
+    if menus[v] then
+      Display.menu_upd(v)
+    end
+    if windows[v] then
+      Display.window_upd(v)
+    end
+  end
+end
+
+function Display.text(k)
+  for i,v in ipairs(z) do
+    if boxes[v] then
+      if boxes[v].type=="ibox" then
+        Display.ib_text(k,v)
       end
     end
   end
@@ -556,6 +565,15 @@ function Display.tofront(name)
 
       if menus[name] and fnd then
         for e,f in ipairs(menus[name].buttons) do
+          if v==f then
+            table.remove(z,i)
+            table.insert(z,f)
+          end
+        end
+      end
+
+      if windows[name] and fnd then
+        for e,f in ipairs(windows[name].buttons) do
           if v==f then
             table.remove(z,i)
             table.insert(z,f)
