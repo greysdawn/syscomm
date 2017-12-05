@@ -10,7 +10,7 @@ function Display.create(type,name,bcol,acol,tcol,x,y,width,height,tsize,mode,b_t
   if type=="menu" then
     menus[name]={}
     menus[name].buttons={}
-    menus[name].h=30
+    menus[name].h=tsize+30
     menus[name].w=width
     menus[name].color=bcol
     menus[name].tcolor=tcol
@@ -21,10 +21,11 @@ function Display.create(type,name,bcol,acol,tcol,x,y,width,height,tsize,mode,b_t
     menus[name].hidden=hid or false
     table.insert(z,name)
     for i,v in pairs(b_t) do --i is the button name, v is the button text, so, btns should look like {mbtn1="text"}
-      Display.create("button",i,bcol,acol,tcol,x+10,y+menus[name].h,width-20,height,menus[name].tsize,menus[name].mode,v,hid)
+      Display.create("button",i,bcol,acol,tcol,x,y+menus[name].h+((height+10)*#menus[name].buttons),width,height,menus[name].tsize,menus[name].mode,v,hid)
       table.insert(menus[name].buttons,i)
-      menus[name].h=menus[name].h+height+10
+      --menus[name].h=menus[name].h+height+10
     end
+    menus[name].h=menus[name].h+((height+10)*#menus[name].buttons)
 
   elseif type=="button" then
     buttons[name]={}
@@ -140,11 +141,6 @@ function Display.add(type,wind,given)
       table.insert(windows[wind].buttons,tostring(i))
     end
   end
-
-  --[[ **** TO ADD ***
-  -Menus
-  -Boxes
-  ]]
 end
 
 function Display.setActiveButton(name)
@@ -303,10 +299,15 @@ function Display.menu(name)
     if not menus[name].hidden then
       love.graphics.setColor(menus[name].color)
       love.graphics.rectangle(menus[name].mode,menus[name].x,menus[name].y,menus[name].w,menus[name].h)
+      love.graphics.setColor(menus[name].tcolor)
+      love.graphics.rectangle("line",menus[name].x,menus[name].y,menus[name].w,30)
       love.graphics.setNewFont(menus[name].tsize)
       love.graphics.setColor(menus[name].tcolor)
       love.graphics.print(name,menus[name].x,menus[name].y)
       for i,v in ipairs(menus[name].buttons) do
+        buttons[v].x=menus[name].x
+        buttons[v].y=menus[name].y+menus[name].tsize+((buttons[v].h+10)*i)
+        buttons[v].w=menus[name].w
         Display.showbutton(v)
       end
     end
@@ -407,9 +408,9 @@ end
 --update the button
 function Display.button_upd(b)
   --if clicked
-  if love.mouse.isDown(1) and posx>=buttons[b].x and posx<=buttons[b].x+buttons[b].w and posy>=buttons[b].y and posy<=buttons[b].y+buttons[b].h and not buttons[b].hidden then
+  if love.mouse.isDown(1) and posx>=buttons[b].x and posx<=buttons[b].x+buttons[b].w and posy>=buttons[b].y and posy<=buttons[b].y+buttons[b].h and not buttons[b].hidden and not buttons[b].active then
     buttons[b].active=true
-  elseif love.mouse.isDown(1) and not (posx>=buttons[b].x and posx<=buttons[b].x+buttons[b].w and posy>=buttons[b].y and posy<=buttons[b].y+buttons[b].h) and not buttons[b].hidden then
+  elseif mm and not (posx>=buttons[b].x and posx<=buttons[b].x+buttons[b].w and posy>=buttons[b].y and posy<=buttons[b].y+buttons[b].h) and not buttons[b].hidden then
     buttons[b].active=false
   end
   --that's all you need
@@ -482,13 +483,23 @@ function Display.getVal(box)
 end
 
 --change the box color
-function Display.changeboxcolor(box,color)
-  boxes[box].bcolor=color
-end
+function Display.changeColor(ob,color)
+  if boxes[ob] then
+    boxes[ob].bcolor=color
+  end
+  if buttons[ob] then
+    buttons[ob].bcolor=color
+  end
+  if menus[ob] then
+    menus[ob].color=color
 
---change button color
-function Display.changebuttoncolor(button,color)
-  buttons[button].bcolor=color
+    for i,v in pairs(menus[ob].buttons) do
+      buttons[v].bcolor=color
+    end
+  end
+  if windows[ob] then
+    windows[ob].bcolor=color
+  end
 end
 
 function Display.clear()
@@ -582,6 +593,50 @@ function Display.tofront(name)
       end
     end
     lp=lp+1
+  end
+end
+
+function Display.move(el,x,y)
+  x=x or 0
+  y=y or 0
+  if boxes[el] then
+  end
+  if menus[el] then
+    menus[el].x=menus[el].x+x
+    menus[el].y=menus[el].y+y
+
+  --  for i,v in pairs(menus[el].buttons) do
+  --    buttons[v].x=buttons[v].x+x
+  --    buttons[v].y=buttons[v].y+y
+  --  end
+  end
+  if windows[el] then
+  end
+  if buttons[el] then
+  end
+end
+
+function Display.slide(obj,newx,time)
+  if menus[obj] then
+    if menus[obj].x~=newx then
+      menus[obj].x=menus[obj].x+math.floor((newx-menus[obj].x)/time)
+
+  --    for i,v in pairs(menus[obj].buttons) do
+  --      buttons[v].x=buttons[v].x+math.floor((newx-buttons[v].x)/time)
+  --    end
+    end
+  end
+end
+
+function Display.drop(obj,newy,time)
+  if menus[obj] then
+    if menus[obj].y~=newy then
+      menus[obj].y=menus[obj].y+math.floor((newy-menus[obj].y)/time)
+
+    --  for i,v in pairs(menus[obj].buttons) do
+    --    buttons[v].y=buttons[v].y+math.floor((newy-buttons[v].y+buttons[v].h*i+10)/time)
+    --  end
+    end
   end
 end
 

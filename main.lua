@@ -21,23 +21,26 @@ function love.load()
     love.filesystem.write("logs.data","")
   end
 
-  if not love.filesystem.exists("data.data") then
-    love.filesystem.write("data.data","")
-  end
 
 
-  first_note_title="Test"
-  first_note_text="This is a simple test."
-  second_note_title="Test2"
-  second_note_text="This is a second test."
+
+  first_note_title="My first note!"
+  first_note_text="Hey there! Thank you for using Syscomm. Here is your first note :D"
+  second_note_title="To-Do"
+  second_note_text="Be safe, be happy, be cool B)"
+  third_note_title="Meow"
+  third_note_text="I'm a cat!"
 
   ts={}
-  ts[first_note_title]=first_note_text
-  ts[second_note_title]=second_note_text
+  ts[1]=first_note_title.."|"..first_note_text
+  ts[2]=second_note_title.."|"..second_note_text
+  ts[3]=third_note_title.."|"..third_note_text
 
-  Save.prepNotes(ts)
-  Save.saveN()
-  Save.readNotes()
+  if not love.filesystem.exists("data.data") then
+    love.filesystem.write("data.data","")
+    Save.prepNotes(ts)
+    Save.saveN()
+  end
 
   Gamestate.registerEvents()
   Gamestate.switch(LP)

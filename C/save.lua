@@ -9,19 +9,19 @@ local m=1
 o=1
 
 function Save.prepNotes(tb)
-  for i,v in pairs(tb) do
-    tosaveN[#tosaveN+1]=tostring(i).."|"..tostring(v)
+  for i in ipairs(tb) do
+    table.insert(tosaveN,tb[i])
   end
 end
 
 function Save.prepLogs(tb)
-  for i,v in pairs(tb) do
-    tosaveL[#tosaveL+1]=tostring(i).."|"..tostring(v)
+  for i in pairs(tb) do
+    table.insert(tosaveL,tb[i])
   end
 end
 
 function Save.saveN()
-  for i in pairs(tosaveN) do
+  for i in ipairs(tosaveN) do
     love.filesystem.append("data.data",tosaveN[i].."\n")
   end
 end
@@ -33,10 +33,12 @@ function Save.saveL()
 end
 
 function Save.readNotes()
+  local iny=30
   for line in love.filesystem.lines("data.data") do
     table.insert(recoveredN,line)
   end
-  e=1
+  local e=1
+  local done=false
   while e<=#recoveredN do
     charas={}
     for x in string.gmatch(recoveredN[e],".") do
@@ -53,10 +55,10 @@ function Save.readNotes()
 
     ti=string.sub(recoveredN[e],1,o-1)
     te=string.sub(recoveredN[e],o+1,#charas)
-    notes[#notes+1]={}
-    notes[#notes].title=ti
-    notes[#notes].text=te
+    Display.create("simpbox",ti,{255,255,255,255},{0,0,0,0},{0,0,0,255},0,iny,love.graphics.getWidth(),20,16,"fill",ti,false)
+    notes[ti]=te
     e=e+1
+    iny=iny+20
   end
 end
 

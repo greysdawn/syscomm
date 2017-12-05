@@ -22,7 +22,7 @@ function Login.register(name,pass)
 
     if not fnd then
       local logs={}
-      logs[name]=pass
+      table.insert(logs,name.."|"..pass)
       Save.prepLogs(logs)
       Save.saveL()
       Gamestate.switch(testroom)
