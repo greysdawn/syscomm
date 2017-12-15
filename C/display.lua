@@ -5,6 +5,7 @@ menus={}
 windows={}
 z={}
 time=0
+btim=-5
 
 function Display.create(type,name,bcol,acol,tcol,x,y,width,height,tsize,mode,b_t,hid,max)
   if type=="menu" then
@@ -300,7 +301,7 @@ function Display.menu(name)
       love.graphics.setColor(menus[name].color)
       love.graphics.rectangle(menus[name].mode,menus[name].x,menus[name].y,menus[name].w,menus[name].h)
       love.graphics.setColor(menus[name].tcolor)
-      love.graphics.rectangle("line",menus[name].x,menus[name].y,menus[name].w,30)
+      love.graphics.line(menus[name].x,menus[name].y+30,menus[name].x+menus[name].w,menus[name].y+30)
       love.graphics.setNewFont(menus[name].tsize)
       love.graphics.setColor(menus[name].tcolor)
       love.graphics.print(name,menus[name].x,menus[name].y)
@@ -408,9 +409,14 @@ end
 --update the button
 function Display.button_upd(b)
   --if clicked
-  if love.mouse.isDown(1) and posx>=buttons[b].x and posx<=buttons[b].x+buttons[b].w and posy>=buttons[b].y and posy<=buttons[b].y+buttons[b].h and not buttons[b].hidden and not buttons[b].active then
-    buttons[b].active=true
-  elseif mm and not (posx>=buttons[b].x and posx<=buttons[b].x+buttons[b].w and posy>=buttons[b].y and posy<=buttons[b].y+buttons[b].h) and not buttons[b].hidden then
+  -- and not (posx>=buttons[b].x and posx<=buttons[b].x+buttons[b].w and posy>=buttons[b].y and posy<=buttons[b].y+buttons[b].h)
+  if love.mouse.isDown(1) and posx>=buttons[b].x and posx<=buttons[b].x+buttons[b].w and posy>=buttons[b].y and posy<=buttons[b].y+buttons[b].h and not buttons[b].hidden then
+      buttons[b].active=true
+  end
+  --if love.mouse.isDown(1) and posx>=buttons[b].x and posx<=buttons[b].x+buttons[b].w and posy>=buttons[b].y and posy<=buttons[b].y+buttons[b].h and not buttons[b].hidden and buttons[b].active then
+    --buttons[b].active=false
+    --end
+  if love.mouse.isDown(1) and not (posx>=buttons[b].x and posx<=buttons[b].x+buttons[b].w and posy>=buttons[b].y and posy<=buttons[b].y+buttons[b].h) and not buttons[b].hidden then
     buttons[b].active=false
   end
   --that's all you need
@@ -619,7 +625,7 @@ end
 function Display.slide(obj,newx,time)
   if menus[obj] then
     if menus[obj].x~=newx then
-      menus[obj].x=menus[obj].x+math.floor((newx-menus[obj].x)/time)
+      menus[obj].x=menus[obj].x+(newx-menus[obj].x)/time
 
   --    for i,v in pairs(menus[obj].buttons) do
   --      buttons[v].x=buttons[v].x+math.floor((newx-buttons[v].x)/time)
@@ -631,7 +637,7 @@ end
 function Display.drop(obj,newy,time)
   if menus[obj] then
     if menus[obj].y~=newy then
-      menus[obj].y=menus[obj].y+math.floor((newy-menus[obj].y)/time)
+      menus[obj].y=menus[obj].y+(newy-menus[obj].y)/time
 
     --  for i,v in pairs(menus[obj].buttons) do
     --    buttons[v].y=buttons[v].y+math.floor((newy-buttons[v].y+buttons[v].h*i+10)/time)

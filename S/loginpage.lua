@@ -15,7 +15,6 @@ function LP:enter()
   Display.create("simpbox","er2",{0,0,0,0},{0,0,0,0},{255,0,0,255},ww/2-135,150,270,30,16,"fill","Login failed; incorrect password",true)
   Display.create("simpbox","er3",{0,0,0,0},{0,0,0,0},{255,0,0,255},ww/2-135,150,270,30,16,"fill","Register failed; already registered",true)
   ert=""
-
 end
 
 function LP:update(dt)
