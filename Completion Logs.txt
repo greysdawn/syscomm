@@ -1,0 +1,4 @@
+KAM: Functions for displaying all buttons thus far
+KAM: Functions for displaying all items in Z-order. Indexing made; function to bring item to front and function to reorder based on a given index. Can reorder menus to front
+KAM: Reorder windows; fixed buttons; streamlined update and ibox text functions; removed useless bsp()
+KAM: Slide and drop menu functions; also, move

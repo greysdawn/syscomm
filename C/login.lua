@@ -3,6 +3,7 @@
 Login={}
 logins={}
 log_parse={}
+cLog={}
 
 li=false
 
@@ -22,7 +23,7 @@ function Login.register(name,pass)
 
     if not fnd then
       local logs={}
-      logs[name]=pass
+      table.insert(logs,Save.encrypt(name).."|"..Save.encrypt(pass))
       Save.prepLogs(logs)
       Save.saveL()
       Gamestate.switch(testroom)
@@ -30,6 +31,9 @@ function Login.register(name,pass)
       Display.showbox("er3")
     end
   end
+
+  cLog.user=name
+  cLog.pass=pass
 end
 
 function Login.lkeys(k)
@@ -71,6 +75,9 @@ function Login.login(name,pass)
       Display.showbox("er1")
     end
   end
+
+  cLog.user=name
+  cLog.pass=pass
 end
 
 return Login

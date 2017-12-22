@@ -4,6 +4,7 @@ local LP={}
 logtab={}
 
 function LP:enter()
+  Display.clear()
   love.graphics.setBackgroundColor(150,150,150,255)
   posx,posy=love.mouse.getPosition()
   Display.create("ibox","usn",{255,255,255,255},{255,200,200,255},{0,0,0,255},ww/2-100,200,200,20,16)
@@ -14,16 +15,14 @@ function LP:enter()
   Display.create("simpbox","er2",{0,0,0,0},{0,0,0,0},{255,0,0,255},ww/2-135,150,270,30,16,"fill","Login failed; incorrect password",true)
   Display.create("simpbox","er3",{0,0,0,0},{0,0,0,0},{255,0,0,255},ww/2-135,150,270,30,16,"fill","Register failed; already registered",true)
   ert=""
-
 end
 
 function LP:update(dt)
+  ww=love.graphics.getWidth()
+  wh=love.graphics.getHeight()
   ab=Display.getActiveButton()
   posx,posy=love.mouse.getPosition()
-  Display.ibox_upd(dt,"usn")
-  Display.ibox_upd(dt,"pas")
-  Display.button_upd("log")
-  Display.button_upd("reg")
+  Display.update(dt)
 
   if ab=="log" then
     Display.setActiveButton("none")
@@ -43,8 +42,7 @@ function LP:update(dt)
 end
 
 function LP:textinput(t)
-    Display.ib_text(t,"usn",10)
-    Display.ib_text(t,"pas",10)
+    Display.text(t)
 end
 
 function LP:keypressed(key)
@@ -52,18 +50,12 @@ function LP:keypressed(key)
     love.event.quit()
   end
 
-
-  Display.bsp(key,"usn")
-  Display.bsp(key,"pas")
   Login.lkeys(key)
 
 end
 
 function LP:draw()
-  Display.box("usn")
-  Display.box("pas")
-  Display.button("log")
-  Display.button("reg")
+  Display.all()
   love.graphics.setNewFont(24)
   love.graphics.setColor({255,255,255,255})
   love.graphics.print("Please log in or register.",ww/2-135,100) --notes[1].title.."   "..notes[1].text.."   "..
@@ -71,9 +63,6 @@ function LP:draw()
   love.graphics.setNewFont(16)
   love.graphics.setColor({255,255,255,255})
   love.graphics.draw(cursor,posx,posy)
-  Display.box("er1")
-  Display.box("er2")
-  Display.box("er3")
 end
 
 return LP
