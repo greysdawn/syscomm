@@ -18,12 +18,10 @@ function LP:enter()
 end
 
 function LP:update(dt)
+  ww=love.graphics.getWidth()
+  wh=love.graphics.getHeight()
   ab=Display.getActiveButton()
   posx,posy=love.mouse.getPosition()
-  --Display.ibox_upd(dt,"usn")
-  --Display.ibox_upd(dt,"pas")
-  --Display.button_upd("log")
-  --Display.button_upd("reg")
   Display.update(dt)
 
   if ab=="log" then

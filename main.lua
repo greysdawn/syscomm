@@ -8,6 +8,7 @@ Login=require("C.login")
 -- States --
 LP=require("S.loginpage")
 testroom=require("S.test")
+NP=require("S.note")
 -- End States --
 
 function love.load()
@@ -32,9 +33,9 @@ function love.load()
   third_note_text="I'm a cat!"
 
   ts={}
-  ts[1]=first_note_title.."|"..first_note_text
-  ts[2]=second_note_title.."|"..second_note_text
-  ts[3]=third_note_title.."|"..third_note_text
+  ts[1]=Save.encrypt(first_note_title).."|"..Save.encrypt(first_note_text)
+  ts[2]=Save.encrypt(second_note_title).."|"..Save.encrypt(second_note_text)
+  ts[3]=Save.encrypt(third_note_title).."|"..Save.encrypt(third_note_text)
 
   if not love.filesystem.exists("data.data") then
     love.filesystem.write("data.data","")

@@ -4,6 +4,7 @@ buttons={}
 menus={}
 windows={}
 z={}
+cNote={}
 time=0
 btim=-5
 
@@ -50,6 +51,31 @@ function Display.create(type,name,bcol,acol,tcol,x,y,width,height,tsize,mode,b_t
     buttons[name].active=false
 
     buttons[name].hidden=hid or false
+    buttons[name].type="reg"
+    table.insert(z,name)
+  elseif type=="notebutton" then
+    buttons[name]={}
+    --active color
+    buttons[name].acolor=acol
+    --button color
+    buttons[name].bcolor=bcol
+    --text color
+    buttons[name].tcolor=tcol
+    buttons[name].x=x
+    buttons[name].y=y
+    buttons[name].w=width
+    buttons[name].h=height
+    --text
+    buttons[name].text=b_t
+    --text size
+    buttons[name].tsize=tsize or 16
+    --draw mode
+    buttons[name].mode=mode or "fill"
+    --not active
+    buttons[name].active=false
+
+    buttons[name].hidden=hid or false
+    buttons[name].type="note"
     table.insert(z,name)
   elseif type=="ibox" then
     boxes[name]={}
@@ -621,6 +647,7 @@ function Display.move(el,x,y)
   if buttons[el] then
   end
 end
+
 
 function Display.slide(obj,newx,time)
   if menus[obj] then
