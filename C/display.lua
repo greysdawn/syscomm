@@ -2,7 +2,6 @@ Display={}
 boxes={}
 buttons={}
 menus={}
-bars={}
 z={}
 cNote={}
 time=0
