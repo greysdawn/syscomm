@@ -1,5 +1,5 @@
 -- Scripts --
-Save=require("C.save")
+Data=require("C.data")
 Display=require("C.display")
 Gamestate=require("C.gamestate")
 Login=require("C.login")
@@ -7,8 +7,9 @@ Login=require("C.login")
 
 -- States --
 LP=require("S.loginpage")
-testroom=require("S.test")
-NP=require("S.note")
+notesroom=require("S.notesroom")
+editroom=require("S.editroom")
+deleteroom=require("S.deleteroom")
 -- End States --
 
 function love.load()
@@ -23,24 +24,8 @@ function love.load()
   end
 
 
-
-
-  first_note_title="My first note!"
-  first_note_text="Hey there! Thank you for using Syscomm. Here is your first note :D"
-  second_note_title="To-Do"
-  second_note_text="Be safe, be happy, be cool B)"
-  third_note_title="Meow"
-  third_note_text="I'm a cat!"
-
-  ts={}
-  ts[1]=Save.encrypt(first_note_title).."|"..Save.encrypt(first_note_text)
-  ts[2]=Save.encrypt(second_note_title).."|"..Save.encrypt(second_note_text)
-  ts[3]=Save.encrypt(third_note_title).."|"..Save.encrypt(third_note_text)
-
   if not love.filesystem.exists("data.data") then
-    love.filesystem.write("data.data","")
-    Save.prepNotes(ts)
-    Save.saveN()
+    love.filesystem.write("data.data",Data.encrypt("First note").."|"..Data.encrypt("Thank you for using Syscomm! So far, this is mostly just a prototype. Please be patient and careful with it, and if anything breaks, don't be afraid to let us know!").."|"..Data.encrypt("The Grey Skies").."|"..Data.encrypt("Above this is the original note author, right here is where you'll find the last editor~").."\n")
   end
 
   Gamestate.registerEvents()

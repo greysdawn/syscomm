@@ -7,8 +7,8 @@ function LP:enter()
   Display.clear()
   love.graphics.setBackgroundColor(150,150,150,255)
   posx,posy=love.mouse.getPosition()
-  Display.create("ibox","usn",{255,255,255,255},{255,200,200,255},{0,0,0,255},ww/2-100,200,200,20,16)
-  Display.create("ibox","pas",{255,255,255,255},{255,200,200,255},{0,0,0,255},ww/2-100,240,200,20,16)
+  Display.create("ibox","usn",{255,255,255,255},{255,200,200,255},{0,0,0,255},ww/2-100,200,200,20,16,"fill","user")
+  Display.create("ibox","pas",{255,255,255,255},{255,200,200,255},{0,0,0,255},ww/2-100,240,200,20,16,"fill","pass")
   Display.create("button","log",{255,255,255,255},{255,200,200,255},{0,0,0,255},ww/2-100,280,80,20,16,"fill","  LOG IN")
   Display.create("button","reg",{255,255,255,255},{255,200,200,255},{0,0,0,255},ww/2+20,280,80,20,16,"fill","REGISTER")
   Display.create("simpbox","er1",{0,0,0,0},{0,0,0,0},{255,0,0,255},ww/2-135,150,270,30,16,"fill","Login failed; not registered",true)
@@ -63,6 +63,12 @@ function LP:draw()
   love.graphics.setNewFont(16)
   love.graphics.setColor({255,255,255,255})
   love.graphics.draw(cursor,posx,posy)
+end
+
+function love.mousereleased(x,y,btn)
+  if btn==1 then
+    Display.clicks(x,y)
+  end
 end
 
 return LP
