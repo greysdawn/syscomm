@@ -8,7 +8,7 @@ cLog={}
 li=false
 
 function Login.register(name,pass)
-  Save.readLog()
+  Data.readLog()
   local x=1
   local fnd=false
   if #boxes["usn"].chars>0 and #boxes["pas"].chars>0 then
@@ -23,10 +23,10 @@ function Login.register(name,pass)
 
     if not fnd then
       local logs={}
-      table.insert(logs,Save.encrypt(name).."|"..Save.encrypt(pass))
-      Save.prepLogs(logs)
-      Save.saveL()
-      Gamestate.switch(testroom)
+      table.insert(logs,Data.encrypt(name).."|"..Data.encrypt(pass))
+      Data.prepLogs(logs)
+      Data.saveL()
+      Gamestate.switch(notesroom)
     else
       Display.showbox("er3")
     end
@@ -52,7 +52,7 @@ function Login.lkeys(k)
 end
 
 function Login.login(name,pass)
-  Save.readLog()
+  Data.readLog()
   local x=1
   local fnd=false
   if #boxes["usn"].chars>0 and #boxes["pas"].chars>0 then
@@ -67,7 +67,7 @@ function Login.login(name,pass)
 
     if fnd then
       if logsdat[x].p==pass then
-        Gamestate.switch(testroom)
+        Gamestate.switch(notesroom)
       else
         Display.showbox("er2")
       end

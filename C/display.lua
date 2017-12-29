@@ -21,9 +21,23 @@ function Display.create(type,name,bcol,acol,tcol,x,y,width,height,tsize,mode,b_t
     menus[name].mode=mode or "fill"
     menus[name].hidden=hid or false
     table.insert(z,name)
-    for i,v in pairs(b_t) do --i is the button name, v is the button text, so, btns should look like {mbtn1="text"}
-      Display.create("button",i,bcol,acol,tcol,x,y+menus[name].h+((height+10)*#menus[name].buttons),width,height,menus[name].tsize,menus[name].mode,v,hid)
-      table.insert(menus[name].buttons,i)
+    for i,v in ipairs(b_t) do
+      local mbti=""
+      local mbte=""
+      local sep=false
+      for c in v:gmatch(".") do
+        if c~="=" then
+          if not sep then
+            mbti=mbti..c
+          else
+            mbte=mbte..c
+          end
+        else
+          sep=true
+        end
+      end
+      Display.create("button",mbti,bcol,acol,tcol,x,y+menus[name].h+((height+10)*#menus[name].buttons),width,height,menus[name].tsize,menus[name].mode,mbte,hid)
+      table.insert(menus[name].buttons,mbti)
       --menus[name].h=menus[name].h+height+10
     end
     menus[name].h=menus[name].h+((height+10)*#menus[name].buttons)
@@ -79,7 +93,7 @@ function Display.create(type,name,bcol,acol,tcol,x,y,width,height,tsize,mode,b_t
   elseif type=="ibox" then
     boxes[name]={}
     --active color
-    boxes[name].max=max or 10
+    boxes[name].max=max or 20
     boxes[name].type=type
     boxes[name].acolor=acol
     --box color
@@ -108,6 +122,13 @@ function Display.create(type,name,bcol,acol,tcol,x,y,width,height,tsize,mode,b_t
     boxes[name].active=false
 
     boxes[name].hidden=hid or false
+
+    if boxes[name].text ~= "" then
+      for c in boxes[name].text:gmatch(".") do
+        boxes[name].chars[#boxes[name].chars+1]=c
+      end
+      boxes[name].tempchars=boxes[name].chars
+    end
     table.insert(z,name)
   elseif type=="simpbox" then
     boxes[name]={}
@@ -202,6 +223,7 @@ function Display.isButtonActive(button)
   end
 end
 
+
 function Display.getActiveOption(menu)
   local act=""
   local ab=Display.getActiveButton()
@@ -229,8 +251,6 @@ end
 
 --show a box
 function Display.box(name)
-  if boxes[name] ~= nil then --if box exists then
-    if not boxes[name].hidden then
       love.graphics.setNewFont(boxes[name].tsize) --set the font to the text size
 
       if boxes[name].active then --if it's active...
@@ -241,17 +261,11 @@ function Display.box(name)
 
       love.graphics.rectangle(boxes[name].mode,boxes[name].x,boxes[name].y,boxes[name].w,boxes[name].h) --draw it
       love.graphics.setColor(boxes[name].tcolor) --set it to the text color
-      love.graphics.print(boxes[name].text,boxes[name].x,boxes[name].y) --write the text
-    end
-  else
-    error("Box "..name.." is not registered.") --if not found, give us a fancy error
-  end
+      love.graphics.printf(boxes[name].text,boxes[name].x,boxes[name].y,boxes[name].w) --write the text
 end
 
 --same with a button
 function Display.button(name)
-  if buttons[name] ~= nil then
-    if not buttons[name].hidden then
       love.graphics.setNewFont(buttons[name].tsize)
 
       if buttons[name].active then
@@ -263,19 +277,13 @@ function Display.button(name)
       love.graphics.rectangle(buttons[name].mode,buttons[name].x,buttons[name].y,buttons[name].w,buttons[name].h)
       love.graphics.setColor(buttons[name].tcolor)
       love.graphics.print(buttons[name].text,buttons[name].x,buttons[name].y)
-      end
-    else
-      error("Button "..name.." is not registered.")
-    end
 end
 
 function Display.menu(name)
-  if menus[name] ~= nil then
-    if not menus[name].hidden then
       love.graphics.setColor(menus[name].color)
       love.graphics.rectangle(menus[name].mode,menus[name].x,menus[name].y,menus[name].w,menus[name].h)
       love.graphics.setColor(menus[name].tcolor)
-      love.graphics.line(menus[name].x,menus[name].y+30,menus[name].x+menus[name].w,menus[name].y+30)
+      love.graphics.line(menus[name].x+1,menus[name].y+30,menus[name].x+menus[name].w-1,menus[name].y+30)
       love.graphics.setNewFont(menus[name].tsize)
       love.graphics.setColor(menus[name].tcolor)
       love.graphics.print(name,menus[name].x,menus[name].y)
@@ -283,31 +291,33 @@ function Display.menu(name)
         buttons[v].x=menus[name].x
         buttons[v].y=menus[name].y+menus[name].tsize+((buttons[v].h+10)*i)
         buttons[v].w=menus[name].w
-        Display.showbutton(v)
+        buttons[v].hidden=false
       end
-    end
-  else
-    error("Menu "..name.." not a valid menu.")
-  end
 end
 
 function Display.all()
   for i,v in ipairs(z) do
     if boxes[v] then
-      Display.box(v)
+      if not boxes[v].hidden then
+        Display.box(v)
+      end
     end
     if menus[v] then
-      Display.menu(v)
+      if not menus[v].hidden then
+        Display.menu(v)
+      end
     end
     if buttons[v] then
-      Display.button(v)
+      if not buttons[v].hidden then
+        Display.button(v)
+      end
     end
   end
 end
 
 --do the text things for input boxes
 function Display.ib_text(k,b)
-  if boxes[b].active and k:match("%w") then --if the box is active and the key is a letter or number
+  if boxes[b].active and k:match("[A-Za-z0-9!-~ ]") then --if the box is active and the key is a letter or number
     if #boxes[b].chars<boxes[b].max then --and the number of characters in the box is less than the max
       boxes[b].chars[#boxes[b].chars+1]=k --add to the characters
     end
@@ -340,46 +350,39 @@ function Display.ibox_upd(dt,box)
   boxes[box].t=boxes[box].t+dt --time variable! Remember this?
 
   if love.keyboard.isDown("backspace") and boxes[box].active then --if backspace is being held down
-    if boxes[box].t>=.125 then --if the time is greater than .125
+    if boxes[box].t>=.075 then --if the time is greater than .125
       if #boxes[box].chars>0 then --and there are things to delete
         boxes[box].chars[#boxes[box].chars]=nil --delete the last one
         boxes[box].t=0 --reset the time
       end
     end
   else
-    boxes[box].t=.125 --or just set it at 0
+    boxes[box].t=.075
   end
 
   boxes[box].text=boxes[box].temptext --set the text once you're done
 end
 
 --update the button
-function Display.button_upd(b)
+function Display.button_upd(b,x,y)
   --if clicked
   -- and not (posx>=buttons[b].x and posx<=buttons[b].x+buttons[b].w and posy>=buttons[b].y and posy<=buttons[b].y+buttons[b].h)
-  if love.mouse.isDown(1) and posx>=buttons[b].x and posx<=buttons[b].x+buttons[b].w and posy>=buttons[b].y and posy<=buttons[b].y+buttons[b].h and not buttons[b].hidden then
-      buttons[b].active=true
-  end
-  --if love.mouse.isDown(1) and posx>=buttons[b].x and posx<=buttons[b].x+buttons[b].w and posy>=buttons[b].y and posy<=buttons[b].y+buttons[b].h and not buttons[b].hidden and buttons[b].active then
-    --buttons[b].active=false
-    --end
-  if love.mouse.isDown(1) and not (posx>=buttons[b].x and posx<=buttons[b].x+buttons[b].w and posy>=buttons[b].y and posy<=buttons[b].y+buttons[b].h) and not buttons[b].hidden then
+  if x>=buttons[b].x and x<=buttons[b].x+buttons[b].w and y>=buttons[b].y and y<=buttons[b].y+buttons[b].h and not buttons[b].hidden and not buttons[b].active then
+      Display.setActiveButton(b)
+  elseif x>=buttons[b].x and x<=buttons[b].x+buttons[b].w and y>=buttons[b].y and y<=buttons[b].y+buttons[b].h and not buttons[b].hidden and buttons[b].active then
+    Display.setActiveButton("none")
+  elseif not (x>=buttons[b].x and x<=buttons[b].x+buttons[b].w and y>=buttons[b].y and y<=buttons[b].y+buttons[b].h) and not buttons[b].hidden and buttons[b].active then
     buttons[b].active=false
   end
-  --that's all you need
+
+
 end
 
 function Display.menu_upd(name)
   if menus[name].hidden then
     menus[name].active=false
   end
-  if not menus[name].hidden then
-    for i in pairs(menus[name].buttons) do
-      Display.button_upd(menus[name].buttons[i])
-    end
-  end
 end
-
 
 function Display.update(dt)
   for i,v in ipairs(z) do
@@ -387,9 +390,6 @@ function Display.update(dt)
       if boxes[v].type=="ibox" then
       Display.ibox_upd(dt,v)
       end
-    end
-    if buttons[v] then
-      Display.button_upd(v)
     end
     if menus[v] then
       Display.menu_upd(v)
@@ -404,6 +404,15 @@ function Display.text(k)
         Display.ib_text(k,v)
       end
     end
+  end
+end
+
+function Display.setVal(b,val)
+  if boxes[b] then
+    boxes[b].text=val
+  end
+  if buttons[b] then
+    buttons[b].text=val
   end
 end
 
@@ -466,7 +475,6 @@ function Display.hidemenu(b)
     buttons[menus[b].buttons[bb]].hidden=true
   end
 end
-
 
 function Display.delete_box(box)
   boxes[box]={}
@@ -544,10 +552,14 @@ function Display.drop(obj,newy,time)
   if menus[obj] then
     if menus[obj].y~=newy then
       menus[obj].y=menus[obj].y+(newy-menus[obj].y)/time
+    end
+  end
+end
 
-    --  for i,v in pairs(menus[obj].buttons) do
-    --    buttons[v].y=buttons[v].y+math.floor((newy-buttons[v].y+buttons[v].h*i+10)/time)
-    --  end
+function Display.clicks(x,y)
+  for i,v in ipairs(z) do
+    if buttons[v] then
+      Display.button_upd(v,x,y)
     end
   end
 end
