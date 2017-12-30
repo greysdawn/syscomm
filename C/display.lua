@@ -7,6 +7,59 @@ cNote={}
 time=0
 btim=-5
 
+Object={
+  x=0,
+  y=0,
+  w=0,
+  h=0,
+  c={255,255,255,255},
+  tc={0,0,0,255},
+  ts=16,
+  text="test",
+  mode="fill",
+  hidden=false,
+  active=false
+}
+
+function Object:new(o)
+  local o=o or {}
+  setmetatable(o,self)
+  self.__index=self
+  return o
+end
+
+Box=Object:new()
+
+function Box:draw()
+  love.graphics.setNewFont(self.ts)
+  love.graphics.setColor(self.c)
+  love.graphics.rectangle(self.mode,self.x,self.y,self.w,self.h)
+  love.graphics.setColor(self.tc)
+  love.graphics.printf(self.text,self.x,self.y,self.w)
+end
+
+function Box:setText(text)
+  self.text=text
+end
+
+Button=Object:new{c2={255,255,255,255}}
+
+function Button:draw()
+  love.graphics.setNewFont(self.ts)
+  if self.active then
+    love.graphics.setColor(self.c2)
+  else
+    love.graphics.setColor(self.c)
+  end
+  love.graphics.rectangle(self.mode,self.x,self.y,self.w,self.h)
+  love.graphics.setColor(self.tc)
+  love.graphics.printf(self.text,self.x,self.y,self.w)
+end
+
+function Button:setActive(val)
+  self.active=val
+end
+
 function Display.create(type,name,bcol,acol,tcol,x,y,width,height,tsize,mode,b_t,hid,max)
   if type=="menu" then
     menus[name]={}
