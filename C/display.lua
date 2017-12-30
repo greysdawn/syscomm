@@ -1,11 +1,6 @@
 Display={}
-boxes={}
-buttons={}
-menus={}
 z={}
 cNote={}
-time=0
-btim=-5
 
 Object={
   x=0,
