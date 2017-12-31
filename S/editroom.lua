@@ -2,7 +2,7 @@ local editroom={}
 
 function editroom:enter()
   posx,posy=love.mouse.getPosition()
-  testbox=Box:new{x=100,y=100,w=400,h=100,ts=100}
+  testbox=SBox:new{x=100,y=100,w=400,h=100,ts=100}
   testbutton=Button:new{x=100,y=200,w=200,h=100,ts=50,c2={200,100,100,255}}
 end
 
