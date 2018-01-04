@@ -157,10 +157,16 @@ function Data.decrypt(str)
   while nu<=#temp do
     if temp[nu]~="0" then
       bit=temp[nu]..temp[nu+1]
+    elseif temp[nu]=="0" then
+      bit=temp[nu+1]
     else
-        bit=temp[nu+1]
+      error(temp[nu])
     end
-    crypt=crypt..ec[tonumber(bit)]
+    if ec[tonumber(bit)] then
+      crypt=crypt..ec[tonumber(bit)]
+    else
+      error(str)
+    end
 
     nu=nu+2
   end
@@ -174,21 +180,23 @@ function Data.readLog()
   end
   e=1
   while e<=#recoveredL do
-    charas={}
+    local charas={}
+    local sep=0
+    local ti=""
+    local te=""
     for x in string.gmatch(recoveredL[e],".") do
       charas[#charas+1]=x
       m=1
     end
     for en in pairs(charas) do
-      if charas[en]~="|" then
-        m=m+1
-      else
-        o=m
+      if charas[en]~="|" and sep==0 then
+        ti=ti..charas[en]
+      elseif charas[en]=="|" then
+        sep=sep+1
+      elseif charas[en]~="|" and sep==1 then
+        te=te..charas[en]
       end
     end
-
-    ti=string.sub(recoveredL[e],1,o-1)
-    te=string.sub(recoveredL[e],o+1,#charas)
     logsdat[#logsdat+1]={}
     logsdat[#logsdat].un=Data.decrypt(ti)
     logsdat[#logsdat].p=Data.decrypt(te)
