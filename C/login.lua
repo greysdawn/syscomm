@@ -1,17 +1,13 @@
 --code behind logging in
 
 Login={}
-logins={}
-log_parse={}
 cLog={}
-
-li=false
 
 function Login.register(name,pass)
   Data.readLog()
   local x=1
   local fnd=false
-  if #boxes["usn"].chars>0 and #boxes["pas"].chars>0 then
+  if #usn.chars>0 and #pas.chars>0 then
     while x<=#logsdat do
       if logsdat[x].un==name then
         fnd=true
@@ -28,7 +24,7 @@ function Login.register(name,pass)
       Data.saveL()
       Gamestate.switch(notesroom)
     else
-      Display.showbox("er3")
+      er3:show()
     end
   end
 
@@ -36,26 +32,11 @@ function Login.register(name,pass)
   cLog.pass=pass
 end
 
-function Login.lkeys(k)
-  local abox=Display.getActiveBox()
-  if k == "tab" then
-    if abox=="usn" then
-      Display.setActiveBox("pas")
-    elseif abox=="pas" then
-      Display.setActiveBox("usn")
-    end
-  end
-
-  if k == "return" and #boxes["usn"].chars>0 and #boxes["pas"].chars>0 then
-    Display.setActiveButton("log")
-  end
-end
-
 function Login.login(name,pass)
   Data.readLog()
   local x=1
   local fnd=false
-  if #boxes["usn"].chars>0 and #boxes["pas"].chars>0 then
+  if #usn.chars>0 and #pas.chars>0 then
     while x<=#logsdat do
       if logsdat[x].un==name then
         fnd=true
@@ -69,10 +50,10 @@ function Login.login(name,pass)
       if logsdat[x].p==pass then
         Gamestate.switch(notesroom)
       else
-        Display.showbox("er2")
+        er2:show()
       end
     else
-      Display.showbox("er1")
+      er1:show()
     end
   end
 

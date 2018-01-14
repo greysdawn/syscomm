@@ -6,39 +6,31 @@ logtab={}
 function LP:enter()
   Display.clear()
   love.graphics.setBackgroundColor(150,150,150,255)
+  ww=love.graphics.getWidth()
+  wh=love.graphics.getHeight()
   posx,posy=love.mouse.getPosition()
-  Display.create("ibox","usn",{255,255,255,255},{255,200,200,255},{0,0,0,255},ww/2-100,200,200,20,16,"fill","user")
-  Display.create("ibox","pas",{255,255,255,255},{255,200,200,255},{0,0,0,255},ww/2-100,240,200,20,16,"fill","pass")
-  Display.create("button","log",{255,255,255,255},{255,200,200,255},{0,0,0,255},ww/2-100,280,80,20,16,"fill","  LOG IN")
-  Display.create("button","reg",{255,255,255,255},{255,200,200,255},{0,0,0,255},ww/2+20,280,80,20,16,"fill","REGISTER")
-  Display.create("simpbox","er1",{0,0,0,0},{0,0,0,0},{255,0,0,255},ww/2-135,150,270,30,16,"fill","Login failed; not registered",true)
-  Display.create("simpbox","er2",{0,0,0,0},{0,0,0,0},{255,0,0,255},ww/2-135,150,270,30,16,"fill","Login failed; incorrect password",true)
-  Display.create("simpbox","er3",{0,0,0,0},{0,0,0,0},{255,0,0,255},ww/2-135,150,270,30,16,"fill","Register failed; already registered",true)
-  ert=""
+  usn=IBox:new{chars={},c={255,255,255,255},c2={255,200,200,255},tc={0,0,0,255},x=ww/2-100,y=200,w=200,h=20,ts=16,text="user",fetchcode="usn"}
+  pas=IBox:new{chars={},c={255,255,255,255},c2={255,200,200,255},tc={0,0,0,255},x=ww/2-100,y=240,w=200,h=20,ts=16,text="pass",fetchcode="pas"}
+  log=Button:new{c1={255,255,255,255},c2={255,200,200,255},tc={0,0,0,255},x=ww/2-100,y=280,w=80,h=20,ts=16,text="  LOG IN",onclick=function()
+    er1:hide()
+    er2:hide()
+    er3:hide()
+    Login.login(usn.text,pas.text)
+  end,fetchcode="log"}
+  reg=Button:new{c1={255,255,255,255},c2={255,200,200,255},tc={0,0,0,255},x=ww/2+20,y=280,w=80,h=20,ts=16,text="REGISTER",onclick=function()
+    er1:hide()
+    er2:hide()
+    er3:hide()
+    Login.register(usn.text,pas.text)
+  end,fetchcode="reg"}
+  er1=SBox:new{c={0,0,0,0},tc={255,0,0,255},x=ww/2-135,y=150,w=270,h=30,ts=16,text="Login failed; not registered",hidden=true,fetchcode="er1"}
+  er2=SBox:new{c={0,0,0,0},tc={255,0,0,255},x=ww/2-135,y=150,w=270,h=30,ts=16,text="Login failed; wrong password",hidden=true,fetchcode="er2"}
+  er3=SBox:new{c={0,0,0,0},tc={255,0,0,255},x=ww/2-135,y=150,w=270,h=30,ts=16,text="Register failed; already registered",hidden=true,fetchcode="er3"}
 end
 
 function LP:update(dt)
-  ww=love.graphics.getWidth()
-  wh=love.graphics.getHeight()
-  ab=Display.getActiveButton()
   posx,posy=love.mouse.getPosition()
   Display.update(dt)
-
-  if ab=="log" then
-    Display.setActiveButton("none")
-    Display.hidebox("er1")
-    Display.hidebox("er2")
-    Display.hidebox("er3")
-    Login.login(boxes["usn"].text,boxes["pas"].text)
-
-  elseif ab=="reg" then
-    Display.setActiveButton("none")
-    Display.hidebox("er1")
-    Display.hidebox("er2")
-    Display.hidebox("er3")
-    Login.register(boxes["usn"].text,boxes["pas"].text)
-
-  end
 end
 
 function LP:textinput(t)
@@ -49,9 +41,23 @@ function LP:keypressed(key)
   if key=="escape" then
     love.event.quit()
   end
-
-  Login.lkeys(key)
-
+  if key=="tab" then
+    if usn.active then
+      usn.active=false
+      pas.active=true
+    elseif pas.active then
+      pas.active=false
+      usn.active=true
+    else
+      usn.active=true
+    end
+  end
+  if key=="return" and string.len(usn.text)>0 and string.len(pas.text)>0 then
+    er1:hide()
+    er2:hide()
+    er3:hide()
+    Login.login(usn.text,pas.text)
+  end
 end
 
 function LP:draw()
