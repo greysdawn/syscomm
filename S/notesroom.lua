@@ -23,7 +23,7 @@ function notesroom:enter()
   n_te=SBox:new{c={255,255,255,255},c2={255,255,255,255},tc={0,0,0,255},x=ww/2,y=80,w=ww/2,h=wh/2,ts=18,text=cNote.text,fetchcode="nte"}
   n_auth=SBox:new{c={255,255,255,255},c2={255,255,255,255},tc={0,0,0,255},x=ww/2,y=wh/2+50,w=ww/2,h=50,ts=18,text=cNote.auth,fetchcode="nauth"}
   n_le=SBox:new{c={255,255,255,255},c2={255,255,255,255},tc={0,0,0,255},x=ww/2,y=wh/2+100,w=ww/2,h=50,ts=18,text=cNote.le,fetchcode="nle"}
-  tm=Button:new{c={255,100,100,255},c2={255,0,0,255},hc={100,100,100,255},tc={255,255,255,255},x=ww-30,y=0,w=30,h=30,ts=30,text=" x",fetchcode="mbut"}
+  tm=Button:new{c={255,100,100,255},c2={255,0,0,255},hc={100,100,100,255},tc={255,255,255,255},x=ww-30,y=0,w=30,h=30,ts=30,text="X",fetchcode="mbut"}
   e_n=Button:new{c={255,100,100,255},c2={255,255,255,255},tc={0,0,0,255},x=ww/2,y=wh/2+150,w=100,h=30,ts=20,text="Edit",fetchcode="en",onclick=function()
     if cNote.title~="No note chosen." then
       Gamestate.switch(editroom)

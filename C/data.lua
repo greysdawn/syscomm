@@ -115,11 +115,11 @@ function Data.readNotes()
     notes[ti].text=te
     notes[ti].auth=auth
     notes[ti].lastedit=Data.decrypt(le)
-    _G[ti]=Button:new{c={255,255,255,255},c2={255,100,100,255},x=0,y=(20*e)+10,w=love.graphics.getWidth()/2,h=20,ts=18,text=ti.." - "..auth,fetchcode=ti,onclick=function(self)
-      cNote.title=self.fetchcode
-      cNote.text=notes[self.fetchcode].text
-      cNote.auth=notes[self.fetchcode].auth
-      cNote.le=notes[self.fetchcode].lastedit
+    _G[ti]=Button:new{ntitle=ti,ntext=te,nauth=auth,nlaste=Data.decrypt(le),c={255,255,255,255},c2={255,100,100,255},x=0,y=(20*e)+10,w=love.graphics.getWidth()/2,h=20,ts=18,text=ti.." - "..auth,fetchcode=ti,onclick=function(self)
+      cNote.title=self.ntitle
+      cNote.text=self.ntext
+      cNote.auth=self.nauth
+      cNote.le=self.nlaste
     end}
     e=e+1
     notes_count=notes_count+1
