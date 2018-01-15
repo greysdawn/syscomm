@@ -3,22 +3,20 @@ local deleteroom={}
 function deleteroom:enter()
   Display.clear()
   posx,posy=love.mouse.getPosition()
-  Display.create("button","y",{255,100,100,255},{255,255,255,255},{0,0,0,255},love.graphics.getWidth()/2-200,love.graphics.getHeight()/2+100,100,30,16,"fill","Yes")
-  Display.create("button","n",{255,100,100,255},{255,255,255,255},{0,0,0,255},love.graphics.getWidth()/2+100,love.graphics.getHeight()/2+100,100,30,16,"fill","No")
-  Display.create("simpbox","curnote",{255,255,255,255},{255,255,255,255},{0,0,0,255},love.graphics.getWidth()/2-100,love.graphics.getHeight()/2-100,200,20,16,"fill",cNote.title)
-  Display.create("simpbox","ays",{0,0,0,0},{0,0,0,0},{255,0,0,255},love.graphics.getWidth()/2-160,love.graphics.getHeight()/2-200,400,100,16,"fill","Are you sure you want to delete this?")
+  dry=Button:new{c={255,100,100,255},c2={255,255,255,255},tc={0,0,0,255},x=love.graphics.getWidth()/2-200,y=love.graphics.getHeight()/2+100,w=100,h=30,ts=16,text="Yes",fetchcode="dry",onclick=function()
+    Data.deleteN(cNote.title)
+    Gamestate.switch(notesroom)
+  end}
+  drn=Button:new{c={255,100,100,255},c2={255,255,255,255},tc={0,0,0,255},x=love.graphics.getWidth()/2+100,y=love.graphics.getHeight()/2+100,w=100,h=30,ts=16,text="No",fetchcode="drn",onclick=function()
+    Gamestate.switch(notesroom)
+  end}
+  curnote=SBox:new{c={255,255,255,255},tc={0,0,0,255},x=love.graphics.getWidth()/2-100,y=love.graphics.getHeight()/2-100,w=200,h=20,ts=16,text=cNote.title,fetchcode="curnote"}
+  ays=SBox:new{c={0,0,0,0},tc={255,0,0,255},x=love.graphics.getWidth()/2-160,y=love.graphics.getHeight()/2-200,w=400,h=100,ts=16,text="Are you sure you want to delete this?",fetchcode="ays"}
 end
 
 function deleteroom:update()
   posx,posy=love.mouse.getPosition()
   Display.update()
-
-  if Display.getActiveButton()=="y" then
-    Data.deleteN(cNote.title)
-    Gamestate.switch(notesroom)
-  elseif Display.getActiveButton()=="n" then
-    Gamestate.switch(notesroom)
-  end
 end
 
 function love.mousereleased(x,y,btn)

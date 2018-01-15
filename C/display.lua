@@ -171,6 +171,11 @@ IBox=Object:new{
     local o=o or {}
     setmetatable(o,self)
     self.__index=self
+    if o.text~="" then
+      for char in o.text:gmatch(".") do
+        table.insert(o.chars,char)
+      end
+    end
     if o.fetchcode~="" then
       table.insert(z,o)
     end

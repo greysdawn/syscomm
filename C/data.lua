@@ -65,7 +65,6 @@ function Data.deleteN(n)
   for i,v in ipairs(newtab) do
     love.filesystem.append("data.data",v.."\n")
   end
-  buttons[n]=nil
   Data.readNotes()
 end
 
@@ -112,18 +111,26 @@ function Data.readNotes()
     ti=Data.decrypt(ti)
     te=Data.decrypt(te)
     auth=Data.decrypt(auth)
-    Display.create("notebutton",ti,{255,255,255,255},{0,0,0,0},{0,0,0,255},0,(20*e)+10,love.graphics.getWidth()/2,20,16,"fill",ti.." - "..auth,false)
     notes[ti]={}
     notes[ti].text=te
     notes[ti].auth=auth
     notes[ti].lastedit=Data.decrypt(le)
+    _G[ti]=Button:new{c={255,255,255,255},c2={255,100,100,255},x=0,y=(20*e)+10,w=love.graphics.getWidth()/2,h=20,ts=18,text=ti.." - "..auth,fetchcode=ti,onclick=function(self)
+      cNote.title=self.fetchcode
+      cNote.text=notes[self.fetchcode].text
+      cNote.auth=notes[self.fetchcode].auth
+      cNote.le=notes[self.fetchcode].lastedit
+    end}
     e=e+1
     notes_count=notes_count+1
-    --if (20*e)+10>love.graphics.getHeight() then
-    --  bars["n_scroll"].enabled=true
-    --end
   end
-  Display.create("button","new_note",{255,255,255,255},{0,0,0,0},{0,0,0,255},0,(20*e)+10,love.graphics.getWidth()/2,20,16,"fill","Add new note",false)
+  new_note=Button:new{c={255,255,255,255},c2={255,100,100,255},tc={0,0,0,255},x=0,y=(20*e)+10,w=love.graphics.getWidth()/2,h=20,ts=18,text="Add new note",fetchcode="newn",onclick=function()
+    cNote.title="New note"
+    cNote.text="Text"
+    cNote.auth=cLog.user
+    cNote.le=cLog.user
+    Gamestate.switch(editroom)
+  end}
 end
 
 function Data.encrypt(str)
