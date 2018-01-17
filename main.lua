@@ -10,6 +10,7 @@ LP=require("S.loginpage")
 notesroom=require("S.notesroom")
 editroom=require("S.editroom")
 deleteroom=require("S.deleteroom")
+sroom=require("S.setroom")
 -- End States --
 
 function love.load()

@@ -22,14 +22,22 @@ function Login.register(name,pass)
       table.insert(logs,Data.encrypt(name).."|"..Data.encrypt(pass))
       Data.prepLogs(logs)
       Data.saveL()
+      cLog.user=name
+      cLog.pass=pass
+       if not love.filesystem.exists("confs.data") then
+          love.filesystem.write("confs.data","name;;"..name.."\n252,250,204,255\n255,255,255,255\n0,0,0,255\n")
+        end
+        Data.readConfs()
+        if not confs[name] then
+          Data.addConf(name,{"252,250,204,255","255,255,255,255","0,0,0,255"})
+          Data.readConfs()
+        end
       Gamestate.switch(notesroom)
     else
       er3:show()
     end
   end
 
-  cLog.user=name
-  cLog.pass=pass
 end
 
 function Login.login(name,pass)
@@ -48,6 +56,16 @@ function Login.login(name,pass)
 
     if fnd then
       if logsdat[x].p==pass then
+        cLog.user=name
+        cLog.pass=pass
+        if not love.filesystem.exists("confs.data") then
+          love.filesystem.write("confs.data","name;;"..name.."\n252,250,204,255\n255,255,255,255\n0,0,0,255\n")
+        end
+        Data.readConfs()
+        if not confs[name] then
+          Data.addConf(name,{"252,250,204,255","255,255,255,255","0,0,0,255"})
+          Data.readConfs()
+        end
         Gamestate.switch(notesroom)
       else
         er2:show()
@@ -56,9 +74,6 @@ function Login.login(name,pass)
       er1:show()
     end
   end
-
-  cLog.user=name
-  cLog.pass=pass
 end
 
 return Login

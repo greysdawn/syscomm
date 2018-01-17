@@ -116,12 +116,36 @@ Button=Object:new{
   end
 }
 
+PicButton=Button:new{
+  img=love.graphics.newImage("M/settings.png"),
+  new=function(self,o)
+    local o=o or {}
+    setmetatable(o,self)
+    self.__index=self
+    o.w=o.img:getWidth()
+    o.h=o.img:getHeight()
+    if o.fetchcode~="" then
+      table.insert(z,o)
+    end
+    return o
+  end,
+  draw=function(self)
+    if not self.hover then
+      love.graphics.setColor({255,255,255,255})
+    else
+      love.graphics.setColor(self.hc)
+    end
+    love.graphics.draw(self.img,self.x,self.y)
+  end
+}
+
 IBox=Object:new{
   c2={255,200,200,255},
   chars={},
   text="",
   time=.075,
   type="ibox",
+  label="",
   max=10,
   draw=function(self)
     love.graphics.setNewFont(self.ts)
@@ -133,6 +157,7 @@ IBox=Object:new{
     love.graphics.rectangle(self.mode,self.x,self.y,self.w,self.h)
     love.graphics.setColor(self.tc)
     love.graphics.printf(self.text,self.x,self.y,self.w)
+    love.graphics.printf(self.label,self.x,self.y+self.h,self.w)
   end,
   update=function(self,dt)
     posx,posy=love.mouse.getPosition()

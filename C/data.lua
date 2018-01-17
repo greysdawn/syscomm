@@ -1,6 +1,7 @@
 Data={} --creates functions object
 logsdat={}
 notes_count=0
+confs={}
 
 ec={"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",
 "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",
@@ -191,6 +192,7 @@ function Data.readLog()
     local sep=0
     local ti=""
     local te=""
+    local ic=""
     for x in string.gmatch(recoveredL[e],".") do
       charas[#charas+1]=x
       m=1
@@ -208,6 +210,58 @@ function Data.readLog()
     logsdat[#logsdat].un=Data.decrypt(ti)
     logsdat[#logsdat].p=Data.decrypt(te)
     e=e+1
+  end
+end
+
+function Data.readConfs()
+  confs={}
+  local s=0
+  local n=""
+  for line in love.filesystem.lines("confs.data") do
+    if string.match(line,"name;;") and s==0 then
+      s=1
+      n=string.sub(line,7)
+      confs[n]={}
+    elseif s==1 then
+      confs[n].bg=line
+      s=2
+    elseif s==2 then
+      confs[n].nc=line
+      s=3
+    elseif s==3 then
+      confs[n].tc=line
+      s=0
+    elseif line=="" then
+      s=0
+    else
+      error("error reading configs")
+    end
+  end
+end
+
+function Data.addConf(name,cta)
+  love.filesystem.append("confs.data","name;;"..name.."\n")
+  for i,v in ipairs(cta) do
+    love.filesystem.append("confs.data",v.."\n")
+  end
+end
+
+function Data.deleteConf(name)
+  if confs[name] then
+    confs[name]=nil
+    local newconfs={}
+    local n=0
+    for line in love.filesystem.lines("confs.data") do
+      if line:match("name;;") and not (line=="name;;"..name) then
+        n=0
+        table.insert(newconfs,line)
+      elseif line=="name;;"..name then
+        n=1
+      elseif not line:match("name;;") and n==0 then
+        table.insert(newconfs,line)
+      end
+    end
+    love.filesystem.write("confs.data",table.concat(newconfs,"\n").."\n")
   end
 end
 
