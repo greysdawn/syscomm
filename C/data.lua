@@ -126,10 +126,7 @@ function Data.readNotes()
     notes_count=notes_count+1
   end
   new_note=Button:new{c={255,255,255,255},c2={255,100,100,255},tc={0,0,0,255},x=0,y=(20*e)+10,w=love.graphics.getWidth()/2,h=20,ts=18,text="Add new note",fetchcode="newn",onclick=function()
-    cNote.title="New note"
-    cNote.text="Text"
-    cNote.auth=cLog.user
-    cNote.le=cLog.user
+    Data.addN("New note","Text",cLog.user,cLog.user)
     Gamestate.switch(editroom)
   end}
 end
