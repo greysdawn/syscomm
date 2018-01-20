@@ -58,8 +58,21 @@ end
 function Data.deleteN(n)
   local newtab={}
   for i,v in ipairs(notesRaw) do
-    if not string.find(v,Data.encrypt(n)) then
+    local nn=""
+    if not string.find(v,Data.encrypt(n).."|") then
       table.insert(newtab,v)
+    else
+      nn=""
+      for char in string.gmatch(v,".") do
+        if char~="|" then
+          nn=nn..char
+        else
+          break
+        end
+      end
+      if not nn==n then
+        table.insert(newtab,v)
+      end
     end
   end
   love.filesystem.write("data.data","")
