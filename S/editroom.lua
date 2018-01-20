@@ -3,8 +3,8 @@ local editroom={}
 function editroom:enter()
   Display.clear()
   posx,posy=love.mouse.getPosition()
-  note_title=IBox:new{chars={},c={255,255,255,255},c2={255,200,200,255},tc={0,0,0,255},x=0,y=30,w=love.graphics.getWidth(),h=50,ts=18,text=cNote.title,max=100,fetchcode="entitle"}
-  note_text=IBox:new{chars={},c={255,255,255,255},c2={255,200,200,255},tc={0,0,0,255},x=0,y=80,w=love.graphics.getWidth(),h=love.graphics.getWidth()/2,text=cNote.text,max=2048,fetchcode="entext"}
+  note_title=IBox:new{c={255,255,255,255},c2={255,200,200,255},tc={0,0,0,255},x=0,y=30,w=love.graphics.getWidth(),h=50,ts=18,text=cNote.title,max=100,fetchcode="entitle"}
+  note_text=IBox:new{c={255,255,255,255},c2={255,200,200,255},tc={0,0,0,255},x=0,y=80,w=love.graphics.getWidth(),h=love.graphics.getWidth()/2,text=cNote.text,max=2048,fetchcode="entext"}
   s_n=Button:new{c={255,100,100,255},c2={255,255,255,255},tc={0,0,0,255},x=love.graphics.getWidth()/2-200,y=love.graphics.getHeight()/2+100,w=100,h=30,ts=18,text="Save",fetchcode="ens_n",onclick=function()
     Data.deleteN(cNote.title)
     Data.addN(note_title.text,note_text.text,cNote.auth,cLog.user)

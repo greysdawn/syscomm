@@ -9,8 +9,8 @@ function LP:enter()
   ww=love.graphics.getWidth()
   wh=love.graphics.getHeight()
   posx,posy=love.mouse.getPosition()
-  usn=IBox:new{chars={},c={255,255,255,255},c2={255,200,200,255},tc={0,0,0,255},x=ww/2-100,y=200,w=200,h=20,ts=18,text="user",fetchcode="usn"}
-  pas=IBox:new{chars={},c={255,255,255,255},c2={255,200,200,255},tc={0,0,0,255},x=ww/2-100,y=240,w=200,h=20,ts=18,text="pass",fetchcode="pas"}
+  usn=IBox:new{c={255,255,255,255},c2={255,200,200,255},tc={0,0,0,255},x=ww/2-100,y=200,w=200,h=20,ts=18,text="user",fetchcode="usn"}
+  pas=IBox:new{c={255,255,255,255},c2={255,200,200,255},tc={0,0,0,255},x=ww/2-100,y=240,w=200,h=20,ts=18,text="pass",fetchcode="pas"}
   log=Button:new{c1={255,255,255,255},c2={255,200,200,255},tc={0,0,0,255},x=ww/2-120,y=280,w=100,h=20,ts=18,text="  LOG IN",onclick=function()
     er1:hide()
     er2:hide()

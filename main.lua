@@ -11,6 +11,7 @@ notesroom=require("S.notesroom")
 editroom=require("S.editroom")
 deleteroom=require("S.deleteroom")
 sroom=require("S.setroom")
+testroom=require("S.testroom")
 -- End States --
 
 function love.load()

@@ -141,7 +141,6 @@ PicButton=Button:new{
 
 IBox=Object:new{
   c2={255,200,200,255},
-  chars={},
   text="",
   time=.075,
   type="ibox",
@@ -196,6 +195,7 @@ IBox=Object:new{
     local o=o or {}
     setmetatable(o,self)
     self.__index=self
+    o.chars={}
     if o.text~="" then
       for char in o.text:gmatch(".") do
         table.insert(o.chars,char)
@@ -209,13 +209,13 @@ IBox=Object:new{
 }
 
 Menu=Object:new{
-  btns={},
   c2={200,200,200,255},
   bth=20,
   new=function(self,o,b)
     local o=o or {}
     setmetatable(o,self)
     self.__index=self
+    o.btns={}
     if b~= nil then
       for i,v in ipairs(b) do
         _G[v[1]]=Button:new{c=o.c,c2=o.c2,tc=o.tc,x=o.x,y=o.y+o.h+((o.bth+10)*#o.btns),w=o.w,h=o.bth,ts=o.ts,text=v[2],hidden=o.hidden,onclick=v[3]}
@@ -247,6 +247,13 @@ Menu=Object:new{
       v.h=self.bth
       v:update()
     end
+  end,
+  add=function(self,b)
+    for i,v in ipairs(b) do
+      _G[v[1]]=Button:new{c=self.c,c2=self.c2,tc=self.tc,x=self.x,y=self.y+self.h+((self.bth+10)*#self.btns),w=self.w,h=self.bth,ts=self.ts,text=v[2],hidden=self.hidden,onclick=v[3]}
+      table.insert(self.btns,_G[v[1]])
+    end
+    self.h=self.h+((self.bth+10)*#b)
   end,
   type="menu"
 }

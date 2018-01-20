@@ -16,7 +16,7 @@ function notesroom:enter()
   cNote.le=""
   ww=love.graphics.getWidth()
   wh=love.graphics.getHeight()
-  n_menu=Menu:new({btns={},c={255,100,100,255},c2={255,200,200,255},tc={0,0,0,255},x=ww,y=62,w=100,h=20,bth=20,ts=18,mode="fill",text="Menu",fetchcode="nmenu"},{{"lo","Log out",function()
+  n_menu=Menu:new({c={255,100,100,255},c2={255,200,200,255},tc={0,0,0,255},x=ww,y=62,w=100,h=20,bth=20,ts=18,mode="fill",text="Menu",fetchcode="nmenu"},{{"lo","Log out",function()
     Gamestate.switch(LP)
   end},{"ex","Exit",function()
     love.event.quit()
