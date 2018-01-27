@@ -48,7 +48,6 @@ function notesroom:update(dt)
   ww=love.graphics.getWidth()
   wh=love.graphics.getHeight()
   posx,posy=love.mouse.getPosition()
-  Display.update(dt)
   if tm.active or cico.active then
     n_menu:tofront()
     cico:xslide((n_menu.x+n_menu.w)-32,5)
@@ -63,6 +62,7 @@ function notesroom:update(dt)
   n_te.text=cNote.text
   n_auth.text=cNote.auth
   n_le.text=cNote.le
+  Display.update(dt)
 end
 
 function love.mousereleased(x,y,btn)
