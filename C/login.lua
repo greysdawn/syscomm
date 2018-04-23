@@ -24,7 +24,7 @@ function Login.register(name,pass)
       Data.saveL()
       cLog.user=name
       cLog.pass=pass
-       if not love.filesystem.exists("confs.data") then
+       if not love.filesystem.getInfo("confs.data") then
           love.filesystem.write("confs.data","name;;"..name.."\n252,250,204,255\n255,255,255,255\n0,0,0,255\n")
         end
         Data.readConfs()
@@ -58,7 +58,7 @@ function Login.login(name,pass)
       if logsdat[x].p==pass then
         cLog.user=name
         cLog.pass=pass
-        if not love.filesystem.exists("confs.data") then
+        if not love.filesystem.getInfo("confs.data") then
           love.filesystem.write("confs.data","name;;"..name.."\n252,250,204,255\n255,255,255,255\n0,0,0,255\n")
         end
         Data.readConfs()
