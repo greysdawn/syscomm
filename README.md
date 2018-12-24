@@ -2,7 +2,7 @@
 A notes app for systems made with LOVE2D
 
 ## A Note:
-# This is still in development. Currently there's not much you can do. Logging in and logging out is about it. Sorry!
+# This is still in development. There are still a lot of features we're working on
 
 ## FAQ
 
