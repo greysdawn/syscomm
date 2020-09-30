@@ -22,7 +22,7 @@ function notesroom:enter()
     love.event.quit()
   end}})
   tbar=SBox:new{c={1,150/255,150/255,1},c2={1,150/255,150/255,1},tc={1,1,1,1},x=0,y=0,w=ww,h=30,ts=28,text="NOTES",fetchcode="tbar"}
-  n_p=SBox:new{c={nbgr,nbgg,nbgb,nbga},c2={nbgr,nbgg,nbgb,nbga},tc={0,0,0,1},x=ww/2,y=30,w=ww/2,h=wh-30,ts=18,text="",fetchcode="nprev"}
+  n_p=SBox:new{c={nbgr/255,nbgg/255,nbgb/255,nbga/255},c2={nbgr/255,nbgg/255,nbgb/255,nbga/255},tc={0,0,0,1},x=ww/2,y=30,w=ww/2,h=wh-30,ts=18,text="",fetchcode="nprev"}
   n_ti=SBox:new{c={0,0,0,0},c2={0,0,0,0},tc={ntcr,ntcg,ntcb,ntca},x=ww/2,y=30,w=ww/2,h=50,ts=18,text=cNote.title,fetchcode="nti"}
   n_te=SBox:new{c={0,0,0,0},c2={0,0,0,0},tc={ntcr,ntcg,ntcb,ntca},x=ww/2,y=80,w=ww/2,h=wh/2,ts=18,text=cNote.text,fetchcode="nte"}
   n_auth=SBox:new{c={0,0,0,0},c2={0,0,0,0},tc={ntcr,ntcg,ntcb,ntca},x=ww/2,y=wh/2+50,w=ww/2,h=50,ts=18,text=cNote.auth,fetchcode="nauth"}
