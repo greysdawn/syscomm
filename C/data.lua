@@ -129,7 +129,7 @@ function Data.readNotes()
     notes[ti].text=te
     notes[ti].auth=auth
     notes[ti].lastedit=Data.decrypt(le)
-    _G[ti]=Button:new{ntitle=ti,ntext=te,nauth=auth,nlaste=Data.decrypt(le),c={255,255,255,255},c2={255,100,100,255},x=0,y=(20*e)+10,w=love.graphics.getWidth()/2,h=20,ts=18,text=ti.." - "..auth,fetchcode=ti,onclick=function(self)
+    _G[ti]=Button:new{ntitle=ti,ntext=te,nauth=auth,nlaste=Data.decrypt(le),c={1,1,1,1},c2={1,100/255,100/255,1},x=0,y=(20*e)+10,w=love.graphics.getWidth()/2,h=20,ts=18,text=ti.." - "..auth,fetchcode=ti,onclick=function(self)
       cNote.title=self.ntitle
       cNote.text=self.ntext
       cNote.auth=self.nauth
@@ -138,7 +138,7 @@ function Data.readNotes()
     e=e+1
     notes_count=notes_count+1
   end
-  new_note=Button:new{c={255,255,255,255},c2={255,100,100,255},tc={0,0,0,255},x=0,y=(20*e)+10,w=love.graphics.getWidth()/2,h=20,ts=18,text="Add new note",fetchcode="newn",onclick=function()
+  new_note=Button:new{c={1,1,1,1},c2={1,100/255,100/255,1},tc={0,0,0,1},x=0,y=(20*e)+10,w=love.graphics.getWidth()/2,h=20,ts=18,text="Add new note",fetchcode="newn",onclick=function()
     Data.addN("New note","Text",cLog.user,cLog.user)
     Gamestate.switch(editroom)
   end}

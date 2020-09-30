@@ -22,12 +22,12 @@ function love.load()
   Gamestate.registerEvents()
   Gamestate.switch(LP)
 
-  if not love.filesystem.exists("logs.data") then
+  if not love.filesystem.getInfo("logs.data") then
     love.filesystem.write("logs.data","")
   end
 
 
-  if not love.filesystem.exists("data.data") then
+  if not love.filesystem.getInfo("data.data") then
     love.filesystem.write("data.data",Data.encrypt("First note").."|"..Data.encrypt("Thank you for using Syscomm! So far, this is mostly just a prototype. Please be patient and careful with it, and if anything breaks, don't be afraid to let us know!").."|"..Data.encrypt("The Grey Skies").."|"..Data.encrypt("Above this is the original note author, right here is where you'll find the last editor~").."\n")
   end
 
