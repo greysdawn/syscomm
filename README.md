@@ -2,7 +2,8 @@
 A notes app for systems made with LOVE2D
 
 ## A Note:
-# This is still in development. There are still a lot of features we're working on
+# This is ~~still~~ *no longer* in development.
+**For info on the new version, check out [syscomm web](https://github.com/greysdawn/syscomm-web)**
 
 ## FAQ
 
@@ -19,13 +20,3 @@ Go over to the releases, download the latest one. Unzip it, and run the Syscomm.
 
 ### Where is data stored?
 It depends on your system (no pun intended), but data is usually stored in your appdata folder under `/LOVE/Syscomm`. On Windows, that'd look something like `C:\Users\username\AppData\Roaming\LOVE\Syscomm`
-
-### We don't like you or your system/your views on stuff/etc, can we still use this?
-I mean, we can't exactly stop you, so... Whatever I guess?
-
-### Who spends time on this?
-Mostly me (Kam)! However, Jeff and 4N4 put work in sometimes, too.
-
-
-
-*Last edit made by Jack at 2349 on 12.23.2018*
